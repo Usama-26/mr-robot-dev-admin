@@ -36,7 +36,7 @@ export default function Login() {
             Login
           </h1>
           <div className="form-container mx-6 sm:mx-10 md:mx-20 lg:mx-24 xl:mx-36 2xl:mx-40 bg-white rounded-2xl shadow-md p-6 md:p-8 xl:p-10 mb-32 ">
-            <form className="mb-4 mx-5 sm:mx-8 2xl:mx-10">
+            <form className="mb-4 mx-3 sm:mx-8 2xl:mx-10">
               <div className="relative mb-4">
                 <RiUserFill className={styles["input-field-icon__left"]} />
                 <input
