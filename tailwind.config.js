@@ -11,6 +11,9 @@ module.exports = {
       fontFamily: {
         montserrat: ["var(--font-montserrat)"],
       },
+      boxShadow: {
+        custom: "0px 0px 10px 5px #00000011",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer components {
+  .sidenav-width {
+    @apply w-[300px] 2xl:w-[400px];
+  }
+
+  .header-width {
+    @apply w-full;
+  }
+  .menu-list-item a {
+    @apply focus:outline-none;
+  }
+
+  .sidenav::-webkit-scrollbar {
+    width: 10px;
+    @apply bg-white;
+  }
+  .sidenav::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+
+  @media (min-width: 1536px) {
+    .header-width {
+      width: calc(100% - 400px);
+    }
+  }
+  @media (min-width: 768px) {
+    .header-width {
+      width: calc(100% - 300px);
+    }
+  }
+}

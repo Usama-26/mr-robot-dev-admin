@@ -20,7 +20,7 @@ export default function ResetPassword() {
   return (
     <>
       <Head>
-        <title>Forgot Password | Mr. Robot Dev</title>
+        <title>Reset Password | Mr. Robot Dev</title>
       </Head>
       <AuthLayout>
         <div className="container my-10 2xl:max-w-4xl xl:max-w-3xl md:max-w-2xl sm:max-w-xl max-w-md w-full">
