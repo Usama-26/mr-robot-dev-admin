@@ -17,7 +17,7 @@ export default function ContactUsTable({ data }) {
   return (
     <div className="overflow-auto table-height  w-full">
       <table className="w-full min-w-max table-auto text-left border-collapse">
-        <thead className="bg-indigo-950 sticky top-0">
+        <thead className="bg-indigo-950 -z-10 sticky top-0">
           <tr>
             {TABLE_HEAD.map((header) => (
               <th key={header} className="table-header">

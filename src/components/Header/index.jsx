@@ -40,7 +40,7 @@ export default function Header() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute right-0 py-4  px-2 rounded-md bg-white z-10 shadow-custom w-40 text-sm">
+            <Menu.Items className="absolute right-0 py-4  px-2 rounded-md bg-white z-50 shadow-custom w-40 text-sm">
               <ul className="list-none">
                 <Menu.Item as={"li"} className={styles["menu-item"]}>
                   <Link href="user/account">
