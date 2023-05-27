@@ -4,9 +4,11 @@ import SideNav from "@/components/SideNav";
 export default function AppLayout({ children }) {
   return (
     <div>
-      <Header />
       <SideNav />
-      {children}
+      <div className="main-margin">
+        <Header />
+        {children}
+      </div>
     </div>
   );
 }

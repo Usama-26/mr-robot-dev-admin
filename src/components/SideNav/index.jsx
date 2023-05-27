@@ -26,7 +26,7 @@ export default function SideNav() {
         className="mx-auto mb-4 md:mb-6 mt-14"
       />
 
-      <ul className="mt-10 text-white">
+      <ul className="my-10 text-white">
         <li>
           <Link href="/admin" className={styles["list-item"]}>
             <MdDashboard className={styles["list-item__icon"]} />
