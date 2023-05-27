@@ -3,6 +3,8 @@ import AppLayout from "@/layouts/AppLayout";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
 import messages from "../../json/messages.json";
+import pricings from "../../json/pricings.json";
+import AppPricingTable from "@/components/AppPricingTable";
 
 const tabs = ["Contact us Form", "App Pricing Form", "Live Chat"];
 export default function Notifications() {
@@ -29,7 +31,9 @@ export default function Notifications() {
             <Tab.Panel>
               <ContactUsTable data={messages} />
             </Tab.Panel>
-            <Tab.Panel></Tab.Panel>
+            <Tab.Panel>
+              <AppPricingTable data={pricings} />
+            </Tab.Panel>
             <Tab.Panel>Chat System</Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
