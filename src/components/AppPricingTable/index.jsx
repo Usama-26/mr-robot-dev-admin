@@ -35,7 +35,7 @@ export default function AppPricingTable({ data }) {
           {data.map(
             ({ sr_no, email, total_price, full_name, date, categories }) => (
               <>
-                <tr key={sr_no} className="even:bg-slate-100">
+                <tr key={sr_no} className="even:bg-slate-100 odd:bg-white">
                   <td className="table-cell">{sr_no}</td>
                   <td className="table-cell">{email}</td>
                   <td className="table-cell"> {full_name}</td>

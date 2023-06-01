@@ -15,9 +15,9 @@ export default function ContactUsTable({ data }) {
     setIsMessageVisible(true);
   }
   return (
-    <div className="overflow-auto table-height  w-full">
+    <div className="overflow-auto table-height w-full">
       <table className="w-full min-w-max table-auto text-left border-collapse">
-        <thead className="bg-indigo-950 -z-10 sticky top-0">
+        <thead className="bg-indigo-950  sticky top-0">
           <tr>
             {TABLE_HEAD.map((header) => (
               <th key={header} className="table-header">
@@ -30,7 +30,7 @@ export default function ContactUsTable({ data }) {
           {data.map(
             ({ sr_no, email, phone_number, full_name, date, message }) => (
               <>
-                <tr key={sr_no} className="even:bg-slate-100">
+                <tr key={sr_no} className="even:bg-slate-100 odd:bg-white">
                   <td className="table-cell">{sr_no}</td>
                   <td className="table-cell">{email}</td>
                   <td className="table-cell"> {full_name}</td>

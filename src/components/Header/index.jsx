@@ -11,7 +11,7 @@ export default function Header() {
     "menu-item__icon": "w-5 h-5 inline mr-2 fill-[#FF001D]",
   };
   return (
-    <div className="w-full sticky top-0 px-8 py-4 shadow-md flex justify-between items-center bg-white z-50">
+    <div className="w-full sticky top-0 px-8 py-4 shadow-md flex justify-between items-center bg-white z-30">
       <div className="relative">
         <input
           type="text"

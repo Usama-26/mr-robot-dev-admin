@@ -26,7 +26,7 @@ export default function PricingTable({ headers, data }) {
 
       <div className="overflow-auto table-height rounded-t-xl w-full">
         <table className="w-full min-w-max table-auto text-center rounded-t-lg border-collapse relative ">
-          <thead className="bg-[#D9D9D9] sticky top-0 p-4 z-10">
+          <thead className="bg-[#D9D9D9] sticky top-0 p-4">
             <tr className="rounded-t-lg">
               {headers.map((header) => (
                 <th key={header} className="p-4 border">

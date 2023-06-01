@@ -50,12 +50,42 @@ export default function Signup() {
                 />
               </div>
               <div className="relative mb-4">
+                <RiUserFill className={styles["input-field-icon__left"]} />
+                <input
+                  type="text"
+                  name="surName"
+                  id="surName"
+                  placeholder="Enter Sur Name"
+                  className={styles["input-field"]}
+                />
+              </div>
+              <div className="relative mb-4">
+                <MdPhoneEnabled className={styles["input-field-icon__left"]} />
+                <input
+                  type="text"
+                  name="fullName"
+                  id="fullName"
+                  placeholder="Enter Your Phone"
+                  className={styles["input-field"]}
+                />
+              </div>
+              <div className="relative mb-4">
                 <MdEmail className={styles["input-field-icon__left"]} />
                 <input
                   type="email"
                   name="email"
                   id="email"
                   placeholder="Enter Email Address"
+                  className={styles["input-field"]}
+                />
+              </div>
+              <div className="relative mb-4">
+                <MdEmail className={styles["input-field-icon__left"]} />
+                <input
+                  type="email"
+                  name="confirmEmail"
+                  id="confirmEmail"
+                  placeholder="Confirm Email Address"
                   className={styles["input-field"]}
                 />
               </div>
@@ -98,26 +128,6 @@ export default function Signup() {
                     <IoMdEye className={styles["input-field-icon__right"]} />
                   )}
                 </button>
-              </div>
-              <div className="relative mb-4">
-                <MdPhoneEnabled className={styles["input-field-icon__left"]} />
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  placeholder="Enter Your Phone"
-                  className={styles["input-field"]}
-                />
-              </div>
-              <div className="relative mb-4">
-                <FaIdBadge className={styles["input-field-icon__left"]} />
-                <input
-                  type="text"
-                  name="fullName"
-                  id="fullName"
-                  placeholder="Enter Your Designation"
-                  className={styles["input-field"]}
-                />
               </div>
 
               <button
