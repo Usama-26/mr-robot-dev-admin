@@ -7,8 +7,9 @@ import {
 } from "react-icons/md";
 import { TbShieldCheckered } from "react-icons/tb";
 import { IoStatsChart } from "react-icons/io5";
-import { FaEnvelopeOpenText } from "react-icons/fa";
+import { FaEnvelopeOpenText, FaUsers } from "react-icons/fa";
 import { IoPricetags } from "react-icons/io5";
+import { IoMdPersonAdd } from "react-icons/io";
 
 export default function SideNav() {
   const styles = {
@@ -67,6 +68,18 @@ export default function SideNav() {
           <Link href="/admin/permissions" className={styles["list-item"]}>
             <TbShieldCheckered className={styles["list-item__icon"]} />
             Permissions
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/user_management" className={styles["list-item"]}>
+            <FaUsers className={styles["list-item__icon"]} />
+            User Management
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/approvals" className={styles["list-item"]}>
+            <IoMdPersonAdd className={styles["list-item__icon"]} />
+            Signup Approvals
           </Link>
         </li>
         <li>
