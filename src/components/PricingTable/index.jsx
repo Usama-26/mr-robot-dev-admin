@@ -18,7 +18,7 @@ export default function PricingTable({ headers, data }) {
     <>
       <button
         onClick={openModal}
-        className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both -mt-20`}
+        className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-20`}
       >
         <FaPlus className="inline w-4 h-4 mr-2 " />
         Add {headers[1]}
