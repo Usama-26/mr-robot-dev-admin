@@ -1,9 +1,10 @@
-import { Dialog } from "@headlessui/react";
+import { Dialog, Listbox } from "@headlessui/react";
 import Modal from "../Modal";
 import ModalOverlay from "../ModalOverlay";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { RiPencilFill } from "react-icons/ri";
-
+import { FaChevronDown, FaPlus } from "react-icons/fa";
+const groups = ["Staff", "Technical", "Marketing Executive", "Manager"];
 export default function UserManagementTable({
   heading,
   headers,
@@ -11,7 +12,15 @@ export default function UserManagementTable({
   member,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddStaffOpen, setIsAddStaffOpen] = useState(true);
   const [modalData, setModalData] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState(groups[0]);
+  function openAddStaffModal() {
+    setIsAddStaffOpen(true);
+  }
+  function closeAddStaffModal() {
+    setIsAddStaffOpen(false);
+  }
   function openModal() {
     setIsModalOpen(true);
   }
@@ -21,6 +30,13 @@ export default function UserManagementTable({
   }
   return (
     <>
+      <button
+        onClick={openAddStaffModal}
+        className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-20`}
+      >
+        <FaPlus className="inline w-4 h-4 mr-2 " />
+        Add Staff
+      </button>
       <div className="flex justify-between">
         <h1 className="font-bold text-2xl text-black mb-4">{heading}</h1>
         <h1 className="font-bold text-2xl text-black mb-4">
@@ -247,7 +263,70 @@ export default function UserManagementTable({
             </>
           )}
         </Modal>
-        <ModalOverlay isOpen={isModalOpen} />
+        <Modal
+          isOpen={isAddStaffOpen}
+          openModal={openAddStaffModal}
+          closeModal={closeAddStaffModal}
+        >
+          <Dialog.Title
+            as="h3"
+            className="text-2xl font-bold leading-6 text-black text-center"
+          >
+            Add Staff
+          </Dialog.Title>
+          <div className="p-8">
+            <label htmlFor="display_name" className="mb-2 block">
+              Email
+            </label>
+            <input
+              type="text"
+              defaultValue={modalData.first_name}
+              className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+            />
+
+            <div className="relative mb-20">
+              <h5 className="mb-2 block"> Group</h5>
+              <Listbox value={selectedGroup} onChange={setSelectedGroup}>
+                <Listbox.Button
+                  className={
+                    "border border-gray-500 rounded-full w-full inline-flex justify-between items-center text-left py-2 px-4"
+                  }
+                >
+                  {selectedGroup}
+                  <FaChevronDown className=" inline" />
+                </Listbox.Button>
+                <Listbox.Options className="absolute bg-white w-full border border-gray-500 rounded-2xl mt-1">
+                  {groups.map((group, index) => (
+                    <Listbox.Option as={"ul"} key={index} value={group}>
+                      {({ active }) => (
+                        <li className={` p-2 ${active ? "bg-gray-400" : ""}`}>
+                          {group}
+                        </li>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </Listbox>
+            </div>
+          </div>
+          <div className="flex justify-between mx-10">
+            <button
+              type="button"
+              onClick={() => {}}
+              className="bg-black text-white px-10 py-2 rounded-full text-lg font-semibold inline-block"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={() => {}}
+              className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-lg font-semibold inline-block "
+            >
+              Send Invite
+            </button>
+          </div>
+        </Modal>
+        <ModalOverlay isOpen={isModalOpen || isAddStaffOpen} />
       </div>
     </>
   );
