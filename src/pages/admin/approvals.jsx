@@ -1,4 +1,5 @@
 import ApprovalsTable from "@/components/ApprovalsTable";
+import ApprovedTable from "@/components/ApprovedTable";
 import AppLayout from "@/layouts/AppLayout";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
@@ -35,6 +36,7 @@ const approved_staff = [
     phone: "+4522312342312",
     country: "Australia",
     date: "02/12/2022",
+    signedup_by: "Admin",
     status: "Approved",
   },
 ];
@@ -103,8 +105,43 @@ export default function SignupApprovals() {
                 heading={"Client Details"}
               />
             </Tab.Panel>
-            <Tab.Panel>Approved Staff</Tab.Panel>
-            <Tab.Panel>Approved Client</Tab.Panel>
+            <Tab.Panel>
+              <ApprovedTable
+                headers={[
+                  "S No.",
+                  "First Name",
+                  "Sur Name",
+                  "Email",
+                  "Phone",
+                  "Country",
+                  "Action",
+                  "Date",
+                  "Signedup By",
+                  "Approved",
+                ]}
+                data={approved_staff}
+                heading={"Approved Staff"}
+              />
+            </Tab.Panel>
+            <Tab.Panel>
+              {" "}
+              <ApprovedTable
+                headers={[
+                  "S No.",
+                  "First Name",
+                  "Sur Name",
+                  "Email",
+                  "Phone",
+                  "Country",
+                  "Action",
+                  "Date",
+                  "Signedup By",
+                  "Approved",
+                ]}
+                data={approved_client}
+                heading={"Approved Client"}
+              />
+            </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
