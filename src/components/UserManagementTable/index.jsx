@@ -12,7 +12,7 @@ export default function UserManagementTable({
   member,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAddStaffOpen, setIsAddStaffOpen] = useState(true);
+  const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
   const [modalData, setModalData] = useState({});
   const [selectedGroup, setSelectedGroup] = useState(groups[0]);
   function openAddStaffModal() {
