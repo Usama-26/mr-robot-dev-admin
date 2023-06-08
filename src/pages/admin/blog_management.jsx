@@ -1,16 +1,26 @@
 import BlogCard from "@/components/BlogCard";
+import Modal from "@/components/Modal";
+import ModalOverlay from "@/components/ModalOverlay";
 import AppLayout from "@/layouts/AppLayout";
-import { Tab } from "@headlessui/react";
+import { Dialog, Tab } from "@headlessui/react";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 
 export default function BlogManagement() {
-  const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
-  function openBlogModal() {
-    setIsBlogModalOpen(true);
+  const [isAddBlogModal, setIsAddBlogModal] = useState(false);
+  const [isEditBlogModal, setIsEditBlogModal] = useState(false);
+  const [modalData, setModalData] = useState(false);
+  function openAddBlogModal() {
+    setIsAddBlogModal(true);
   }
-  function closeBlogModal() {
-    setIsBlogModalOpen(false);
+  function closeAddBlogModal() {
+    setIsAddBlogModal(false);
+  }
+  function openEditBlogModal() {
+    setIsBlogModal(true);
+  }
+  function closeEditBlogModal() {
+    setIsBlogModal(true);
   }
   return (
     <AppLayout>
@@ -20,7 +30,7 @@ export default function BlogManagement() {
             Blog Management
           </h1>
           <button
-            onClick={openBlogModal}
+            onClick={openAddBlogModal}
             className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both`}
           >
             <FaPlus className="inline w-4 h-4 mr-2 " />
@@ -34,6 +44,95 @@ export default function BlogManagement() {
           <BlogCard />
         </div>
       </div>
+      <Modal
+        isOpen={isAddBlogModal}
+        openModal={openAddBlogModal}
+        closeModal={closeAddBlogModal}
+      >
+        <Dialog.Title
+          as="h3"
+          className="text-lg font-medium leading-6 text-black text-center mb-4"
+        >
+          Add New Blog
+        </Dialog.Title>
+        <label htmlFor="blog_heading" className="mb-2 block font-bold">
+          Blog Heading
+        </label>
+        <input
+          type="text"
+          id="blog_heading"
+          placeholder="Enter blog heading here"
+          className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+        />
+        <label htmlFor="blog_heading" className="mb-2 block font-bold">
+          Blog Content
+        </label>
+        <textarea
+          placeholder="Enter text here"
+          className="border border-gray-500 rounded-lg p-4 mb-4 w-full h-48 resize-none"
+        ></textarea>
+        <div className="border border-dashed border-gray-500 rounded-xl p-8 mb-4">
+          <button
+            type="button"
+            onClick={() => {}}
+            className="bg-black text-white px-10 py-2 rounded-full font-semibold block mx-auto"
+          >
+            Choose icon to Upload
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={() => {}}
+          className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-xl font-semibold block mx-auto"
+        >
+          Save
+        </button>
+      </Modal>
+      <Modal
+        isOpen={isEditBlogModal}
+        openModal={openEditBlogModal}
+        closeModal={closeEditBlogModal}
+      >
+        <Dialog.Title
+          as="h3"
+          className="text-lg font-medium leading-6 text-black text-center mb-4"
+        >
+          Edit Blog
+        </Dialog.Title>
+        <label htmlFor="blog_heading" className="mb-2 block font-bold">
+          Blog Heading
+        </label>
+        <input
+          type="text"
+          id="blog_heading"
+          placeholder="Enter blog heading here"
+          className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+        />
+        <label htmlFor="blog_heading" className="mb-2 block font-bold">
+          Blog Content
+        </label>
+        <textarea
+          placeholder="Enter text here"
+          className="border border-gray-500 rounded-lg p-4 mb-4 w-full h-48 resize-none"
+        ></textarea>
+        <div className="border border-dashed border-gray-500 rounded-xl p-8 mb-4">
+          <button
+            type="button"
+            onClick={() => {}}
+            className="bg-black text-white px-10 py-2 rounded-full font-semibold block mx-auto"
+          >
+            Choose icon to Upload
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={() => {}}
+          className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-xl font-semibold block mx-auto"
+        >
+          Edit & Save
+        </button>
+      </Modal>
+      <ModalOverlay isOpen={isAddBlogModal} />
     </AppLayout>
   );
 }

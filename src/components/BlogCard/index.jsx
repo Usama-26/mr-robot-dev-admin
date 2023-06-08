@@ -15,9 +15,9 @@ export default function BlogCard() {
           Read all about our interview with Private Internet Access
         </h1>
         <p className="text-center">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
+          {` Lorem Ipsum is simply dummy text of the printing and typesetting
           industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s
+          since the 1500s`}
         </p>
       </div>
       <div className=" mx-auto w-56 flex justify-between mt-4">
