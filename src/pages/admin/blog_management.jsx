@@ -8,7 +8,7 @@ import { FaPlus } from "react-icons/fa";
 
 export default function BlogManagement() {
   const [isAddBlogModal, setIsAddBlogModal] = useState(false);
-  const [isEditBlogModal, setIsEditBlogModal] = useState(false);
+
   const [modalData, setModalData] = useState(false);
   function openAddBlogModal() {
     setIsAddBlogModal(true);
@@ -16,12 +16,7 @@ export default function BlogManagement() {
   function closeAddBlogModal() {
     setIsAddBlogModal(false);
   }
-  function openEditBlogModal() {
-    setIsBlogModal(true);
-  }
-  function closeEditBlogModal() {
-    setIsBlogModal(true);
-  }
+
   return (
     <AppLayout>
       <div className="max-w-screen-2xl mx-auto  p-4">
@@ -88,50 +83,7 @@ export default function BlogManagement() {
           Save
         </button>
       </Modal>
-      <Modal
-        isOpen={isEditBlogModal}
-        openModal={openEditBlogModal}
-        closeModal={closeEditBlogModal}
-      >
-        <Dialog.Title
-          as="h3"
-          className="text-lg font-medium leading-6 text-black text-center mb-4"
-        >
-          Edit Blog
-        </Dialog.Title>
-        <label htmlFor="blog_heading" className="mb-2 block font-bold">
-          Blog Heading
-        </label>
-        <input
-          type="text"
-          id="blog_heading"
-          placeholder="Enter blog heading here"
-          className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
-        />
-        <label htmlFor="blog_heading" className="mb-2 block font-bold">
-          Blog Content
-        </label>
-        <textarea
-          placeholder="Enter text here"
-          className="border border-gray-500 rounded-lg p-4 mb-4 w-full h-48 resize-none"
-        ></textarea>
-        <div className="border border-dashed border-gray-500 rounded-xl p-8 mb-4">
-          <button
-            type="button"
-            onClick={() => {}}
-            className="bg-black text-white px-10 py-2 rounded-full font-semibold block mx-auto"
-          >
-            Choose icon to Upload
-          </button>
-        </div>
-        <button
-          type="button"
-          onClick={() => {}}
-          className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-xl font-semibold block mx-auto"
-        >
-          Edit & Save
-        </button>
-      </Modal>
+
       <ModalOverlay isOpen={isAddBlogModal} />
     </AppLayout>
   );
