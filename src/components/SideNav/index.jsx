@@ -10,6 +10,8 @@ import { IoStatsChart } from "react-icons/io5";
 import { FaEnvelopeOpenText, FaUsers } from "react-icons/fa";
 import { IoPricetags } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
+import { HiChatBubbleOvalLeft } from "react-icons/hi2";
+import { GiCheckedShield } from "react-icons/gi";
 
 export default function SideNav() {
   const styles = {
@@ -80,6 +82,18 @@ export default function SideNav() {
           <Link href="/admin/approvals" className={styles["list-item"]}>
             <IoMdPersonAdd className={styles["list-item__icon"]} />
             Signup Approvals
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/security" className={styles["list-item"]}>
+            <GiCheckedShield className={styles["list-item__icon"]} />
+            Security
+          </Link>
+        </li>
+        <li>
+          <Link href="/admin/chat" className={styles["list-item"]}>
+            <HiChatBubbleOvalLeft className={styles["list-item__icon"]} />
+            Live Chat
           </Link>
         </li>
         <li>
