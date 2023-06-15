@@ -6,7 +6,7 @@ import messages from "../../json/messages.json";
 import pricings from "../../json/pricings.json";
 import AppPricingTable from "@/components/AppPricingTable";
 
-const tabs = ["Contact us Form", "App Pricing Form", "Live Chat"];
+const tabs = ["Contact us Form", "App Pricing Form"];
 export default function Notifications() {
   return (
     <AppLayout>
@@ -34,7 +34,6 @@ export default function Notifications() {
             <Tab.Panel>
               <AppPricingTable data={pricings} />
             </Tab.Panel>
-            <Tab.Panel>Chat System</Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>

@@ -49,7 +49,7 @@ export default function PricingTable({ headers, data }) {
                       openModal();
                       setModalData(item);
                     }}
-                    className="bg-red-600 text-white px-10 py-3 rounded-full"
+                    className="bg-[#D32A3D] text-white px-10 py-3 rounded-full"
                   >
                     Edit
                   </button>
