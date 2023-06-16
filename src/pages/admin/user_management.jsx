@@ -31,7 +31,7 @@ const client = [
 ];
 export default function UserManagement() {
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto p-4">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -89,6 +89,6 @@ export default function UserManagement() {
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </AppLayout>
+    </>
   );
 }

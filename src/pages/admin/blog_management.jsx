@@ -18,7 +18,7 @@ export default function BlogManagement() {
   }
 
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto  p-4">
         <div className="flex justify-between items-center mb-6 ">
           <h1 className="font-bold text-2xl text-black mb-4">
@@ -85,6 +85,6 @@ export default function BlogManagement() {
       </Modal>
 
       <ModalOverlay isOpen={isAddBlogModal} />
-    </AppLayout>
+    </>
   );
 }

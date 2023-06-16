@@ -34,7 +34,7 @@ const device = [
 ];
 export default function Pricing() {
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto p-4 relative">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -74,6 +74,6 @@ export default function Pricing() {
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </AppLayout>
+    </>
   );
 }

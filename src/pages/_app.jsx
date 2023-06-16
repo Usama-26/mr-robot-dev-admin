@@ -1,3 +1,4 @@
+import AppLayout from "@/layouts/AppLayout";
 import "@/styles/globals.css";
 import { Montserrat } from "next/font/google";
 const monteserrat = Montserrat({
@@ -7,7 +8,9 @@ const monteserrat = Montserrat({
 export default function App({ Component, pageProps }) {
   return (
     <main className={`${monteserrat.variable} font-montserrat`}>
-      <Component {...pageProps} />
+      <AppLayout>
+        <Component {...pageProps} />
+      </AppLayout>
     </main>
   );
 }

@@ -9,7 +9,7 @@ import AppPricingTable from "@/components/AppPricingTable";
 const tabs = ["Contact us Form", "App Pricing Form"];
 export default function Notifications() {
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto  p-4">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -37,6 +37,6 @@ export default function Notifications() {
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </AppLayout>
+    </>
   );
 }

@@ -28,7 +28,7 @@ export default function Chat() {
     setIsDeleteOpen(false);
   }
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto p-4">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -274,6 +274,6 @@ export default function Chat() {
       </Modal>
 
       <ModalOverlay isOpen={isEditChatModalOpen || isDeleteOpen} />
-    </AppLayout>
+    </>
   );
 }

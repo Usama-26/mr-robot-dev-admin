@@ -12,7 +12,7 @@ export default function Settings() {
     "input-field-icon__right": "w-6 h-6 absolute top-3 right-4",
   };
   return (
-    <AppLayout>
+    <>
       <div className="max-w-screen-2xl mx-auto  p-4">
         <h1 className="font-bold text-2xl text-black mb-4">Settings</h1>
 
@@ -110,6 +110,6 @@ export default function Settings() {
           </form>
         </div>
       </div>
-    </AppLayout>
+    </>
   );
 }
