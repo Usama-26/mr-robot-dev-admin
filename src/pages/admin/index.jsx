@@ -52,7 +52,7 @@ export default function Admin() {
           <Chart
             series={[
               {
-                name: "Subscribed Users",
+                name: "Visited Users",
                 data: [
                   50, 110, 120, 140, 130, 210, 220, 300, 290, 310, 340, 400,
                 ],
@@ -152,6 +152,74 @@ export default function Admin() {
             }}
           />
         </div>
+      </div>
+      <div className="my-4 p-4 bg-gray-200 rounded-lg">
+        <Chart
+          series={[
+            {
+              name: "Submitted Forms",
+              data: [50, 110, 120, 140, 130, 210, 220, 300, 290, 310, 340, 400],
+            },
+          ]}
+          height={400}
+          type="line"
+          options={{
+            title: {
+              text: "Total Submitted Forms",
+              style: {
+                fontSize: "20px",
+                fontWeight: "bold",
+              },
+            },
+            stroke: {
+              curve: "smooth",
+            },
+            chart: {
+              id: "submitted-forms",
+              background: "#e5e7eb",
+              dropShadow: {
+                enabled: true,
+                color: "#000",
+                top: 18,
+                left: 7,
+                blur: 10,
+                opacity: 0.2,
+              },
+              toolbar: {
+                show: true,
+              },
+            },
+            colors: ["#D32A3D"],
+            plotOptions: {
+              bar: { columnWidth: "50%" },
+            },
+            dataLabels: {
+              enabled: true,
+              background: {
+                enabled: true,
+                borderRadius: 5,
+                borderWidth: 0,
+                padding: 5,
+              },
+            },
+            xaxis: {
+              categories: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+              ],
+            },
+          }}
+        />
       </div>
     </div>
   );
