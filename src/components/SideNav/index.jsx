@@ -45,7 +45,7 @@ export default function SideNav() {
         <li>
           <Link href="/admin/blog_management" className={styles["list-item"]}>
             <MdDashboard className={styles["list-item__icon"]} />
-            Blog Management
+            Blog Management 
           </Link>
         </li>
         <li>
