@@ -12,8 +12,11 @@ import { IoPricetags } from "react-icons/io5";
 import { IoMdPersonAdd } from "react-icons/io";
 import { HiChatBubbleOvalLeft } from "react-icons/hi2";
 import { GiCheckedShield } from "react-icons/gi";
+import { withAuth } from "../Helpers/withAuth";
 
-export default function SideNav() {
+const SideNav = (props) => {
+  const userData = props.userData;
+  console.log("User Data from SideNav", userData);
   const styles = {
     "list-item":
       "menu-list-item block px-10 py-4 hover:bg-[#A1202E] font-medium",
@@ -36,73 +39,128 @@ export default function SideNav() {
             Dashboard
           </Link>
         </li>
-        <li>
-          <Link href="/admin/pricing" className={styles["list-item"]}>
-            <IoPricetags className={styles["list-item__icon"]} />
-            App Pricing
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/blog_management" className={styles["list-item"]}>
-            <MdDashboard className={styles["list-item__icon"]} />
-            Blog Management 
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/newsletter" className={styles["list-item"]}>
-            <FaEnvelopeOpenText className={styles["list-item__icon"]} />
-            Newsletter
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/statistics" className={styles["list-item"]}>
-            <IoStatsChart className={styles["list-item__icon"]} />
-            Statistics
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/notifications" className={styles["list-item"]}>
-            <MdNotifications className={styles["list-item__icon"]} />
-            Notifications
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/permissions" className={styles["list-item"]}>
-            <TbShieldCheckered className={styles["list-item__icon"]} />
-            Permissions
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/user_management" className={styles["list-item"]}>
-            <FaUsers className={styles["list-item__icon"]} />
-            User Management
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/approvals" className={styles["list-item"]}>
-            <IoMdPersonAdd className={styles["list-item__icon"]} />
-            Signup Approvals
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/security" className={styles["list-item"]}>
-            <GiCheckedShield className={styles["list-item__icon"]} />
-            Security
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/chat" className={styles["list-item"]}>
-            <HiChatBubbleOvalLeft className={styles["list-item__icon"]} />
-            Live Chat
-          </Link>
-        </li>
-        <li>
-          <Link href="/admin/settings" className={styles["list-item"]}>
-            <MdOutlineSettings className={styles["list-item__icon"]} />
-            Settings
-          </Link>
-        </li>
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "App Pricing Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/pricing" className={styles["list-item"]}>
+              <IoPricetags className={styles["list-item__icon"]} />
+              App Pricing
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Blog Management Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/blog_management" className={styles["list-item"]}>
+              <MdDashboard className={styles["list-item__icon"]} />
+              Blog Management
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Newsletter Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/newsletter" className={styles["list-item"]}>
+              <FaEnvelopeOpenText className={styles["list-item__icon"]} />
+              Newsletter
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Statistics Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/statistics" className={styles["list-item"]}>
+              <IoStatsChart className={styles["list-item__icon"]} />
+              Statistics
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Notifications Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/notifications" className={styles["list-item"]}>
+              <MdNotifications className={styles["list-item__icon"]} />
+              Notifications
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Permissions Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/permissions" className={styles["list-item"]}>
+              <TbShieldCheckered className={styles["list-item__icon"]} />
+              Permissions
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "User Management"
+        )?.view && (
+          <li>
+            <Link href="/admin/user_management" className={styles["list-item"]}>
+              <FaUsers className={styles["list-item__icon"]} />
+              User Management
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Signup Approvals"
+        )?.view && (
+          <li>
+            <Link href="/admin/approvals" className={styles["list-item"]}>
+              <IoMdPersonAdd className={styles["list-item__icon"]} />
+              Signup Approvals
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Security"
+        )?.view && (
+          <li>
+            <Link href="/admin/security" className={styles["list-item"]}>
+              <GiCheckedShield className={styles["list-item__icon"]} />
+              Security
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Live Chat Screen"
+        )?.view && (
+          <li>
+            <Link href="/admin/chat" className={styles["list-item"]}>
+              <HiChatBubbleOvalLeft className={styles["list-item__icon"]} />
+              Live Chat
+            </Link>
+          </li>
+        )}
+
+        {userData?.group?.permissions?.find(
+          (permission) => permission.route === "Settings"
+        )?.view && (
+          <li>
+            <Link href="/admin/settings" className={styles["list-item"]}>
+              <MdOutlineSettings className={styles["list-item__icon"]} />
+              Settings
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );
-}
+};
+export default withAuth(SideNav);

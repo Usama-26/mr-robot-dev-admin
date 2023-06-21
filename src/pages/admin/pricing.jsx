@@ -1,40 +1,35 @@
+import { useState, useEffect } from "react";
 import ContactUsTable from "@/components/ContactUsTable";
 import AppLayout from "@/layouts/AppLayout";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
+import { getPricingItems } from "@/redux/features/features.actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { withAuth } from "@/components/Helpers/withAuth";
 
 import PricingTable from "@/components/PricingTable";
 const tabs = ["Services", "Devices", "Functionalities"];
-const service = [
-  {
-    sr_no: 1,
-    title: "MVP",
-    desc: "Service Description",
-    price: 2500,
-    icon: "mvp",
-  },
-];
-const functionality = [
-  {
-    sr_no: 1,
-    title: "AI/ML",
-    desc: "Functionality Desc",
-    price: 500,
-    icon: "ai",
-  },
-];
-const device = [
-  {
-    sr_no: 1,
-    title: "Camera",
-    desc: "Device Desc",
-    price: 1000,
-    icon: "camera",
-  },
-];
-export default function Pricing() {
+
+const Pricing = (props) => {
+  const userData = props.userData;
+  const pricingItems = useSelector(({ features }) => features.pricingItems);
+  console.log("PricingItems", pricingItems);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    getPricingitems();
+  }, []);
+
+  const getPricingitems = () => {
+    dispatch(getPricingItems());
+  };
+
   return (
-    <>
+    <AppLayout>
       <div className="max-w-screen-2xl mx-auto p-4 relative">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -56,24 +51,29 @@ export default function Pricing() {
             <Tab.Panel>
               <PricingTable
                 headers={["S No.", "Service", "Price", "Action"]}
-                data={service}
+                data={pricingItems?.Service}
+                userData={userData}
               />
             </Tab.Panel>
             <Tab.Panel>
               <PricingTable
                 headers={["S No.", "Device", "Price", "Action"]}
-                data={device}
+                data={pricingItems?.Device}
+                userData={userData}
               />
             </Tab.Panel>
             <Tab.Panel>
               <PricingTable
                 headers={["S No.", "Functionality", "Price", "Action"]}
-                data={functionality}
+                data={pricingItems?.Functionality}
+                userData={userData}
               />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </>
+    </AppLayout>
   );
-}
+};
+
+export default withAuth(Pricing);

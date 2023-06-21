@@ -1,24 +1,24 @@
-import AppLayout from "@/layouts/AppLayout";
 import "@/styles/globals.css";
 import { Montserrat } from "next/font/google";
-import { useRouter } from "next/router";
+import { ReduxWrapper } from "../redux/store";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const monteserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
 });
-
-export default function App({ Component, pageProps }) {
-  const router = useRouter();
-
+function App({ Component, pageProps }) {
   return (
     <main className={`${monteserrat.variable} font-montserrat`}>
-      {router.pathname.includes("admin") ? (
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
-      ) : (
-        <Component {...pageProps} />
-      )}
+      <ToastContainer
+        autoClose={2000}
+        pauseOnHover={false}
+        pauseOnFocusLoss={false}
+        position={"top-center"}
+      />
+      <Component {...pageProps} />
     </main>
   );
 }
+
+export default ReduxWrapper.withRedux(App);

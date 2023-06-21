@@ -1,24 +1,76 @@
-import { RiPencilFill } from "react-icons/ri";
+import { RiEyeFill } from "react-icons/ri";
 import Modal from "../Modal";
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import ModalOverlay from "../ModalOverlay";
-export default function ApprovedTable({ data, headers, heading }) {
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { updateUser } from "@/redux/auth/auth.actions";
+import { getUsers } from "@/redux/auth/auth.actions";
+import Pagination from "../pagination";
+import moment from "moment";
+export default function ApprovedTable({ headers, heading, role, userData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalData, setModalData] = useState({});
+  const [modalData, setModalData] = useState();
+
+  const usersData = useSelector(({ auth }) => auth.users);
+  const user = useSelector(({ auth }) => auth.user);
+  const [reason, setReason] = useState("");
+  console.log("Users Data", usersData);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(10);
+
+  useEffect(() => {
+    getUsers1(currentPage);
+  }, []);
+
+  const getUsers1 = (page) => {
+    dispatch(getUsers(page, role));
+  };
   function openModal() {
     setIsModalOpen(true);
   }
   function closeModal() {
     setIsModalOpen(false);
-    setModalData({});
+    setModalData();
+    setReason("");
   }
+
+  const handleCallBack = () => {
+    getUsers1();
+    closeModal();
+  };
+
+  const handleDisApprove = () => {
+    let id = modalData;
+    console.log("id", id);
+    const payload = {
+      isApproved: false,
+      bio: reason,
+    };
+
+    dispatch(updateUser(payload, id, handleCallBack));
+  };
+
+  const fetchNextRecords = (number) => {
+    getUsers1(number);
+  };
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    fetchNextRecords(pageNumber);
+  };
+
   return (
     <>
       <div className="flex justify-between">
         <h1 className="font-bold text-2xl text-black mb-4">{heading}</h1>
         <h1 className="font-bold text-2xl text-black mb-4">
-          Total: {data.length}
+          Total: {usersData?.totalResults}
         </h1>
       </div>
       <div className="overflow-auto table-height w-full">
@@ -33,48 +85,65 @@ export default function ApprovedTable({ data, headers, heading }) {
             </tr>
           </thead>
           <tbody>
-            {data.map(
-              ({
-                sr_no,
-                email,
-                phone,
-                first_name,
-                date,
-                country,
-                sur_name,
-                signedup_by,
-                status,
-              }) => (
-                <tr key={sr_no} className="even:bg-slate-100 odd:bg-white">
-                  <td className="table-cell">{sr_no}</td>
-                  <td className="table-cell">{first_name}</td>
-                  <td className="table-cell"> {sur_name}</td>
-                  <td className="table-cell"> {email}</td>
-                  <td className="table-cell"> {phone}</td>
-                  <td className="table-cell">{country}</td>
-                  <td className="table-cell">
-                    <button
-                      onClick={() => {
-                        openModal(),
-                          setModalData(
-                            "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus nobis ipsa quibusdam perspiciatis, sed delectus doloribus minus autem harum animi."
-                          );
-                      }}
-                      className="bg-black p-1 rounded-lg"
-                    >
-                      <RiPencilFill className="w-6 h-6 fill-white" />
-                    </button>
-                  </td>
-                  <td className="table-cell">{date}</td>
-                  <td className="table-cell">{signedup_by}</td>
-                  <td className="table-cell">
-                    <span className="rounded-full bg-green-600 text-white py-2 px-4">
-                      {status}
-                    </span>
-                  </td>
-                </tr>
-              )
-            )}
+            {usersData?.results?.map((item, index) => (
+              <tr key={index} className="even:bg-slate-100 odd:bg-white">
+                <td className="table-cell">
+                  {" "}
+                  {index + 1 + (currentPage - 1) * recordsPerPage}
+                </td>
+                <td className="table-cell">{item.firstName}</td>
+                <td className="table-cell"> {item.surName}</td>
+                <td className="table-cell"> {item.email}</td>
+                <td className="table-cell"> {item.phoneNo}</td>
+                <td className="table-cell">{item?.country}</td>
+                <td className="table-cell">
+                  {userData?.group?.permissions?.find(
+                    (permission) => permission.route === "Signup Approvals"
+                  )?.update && (
+                    <>
+                      {!item.isApproved && (
+                        <button
+                          onClick={() => {
+                            openModal();
+                            setModalData(item.id);
+                            setReason(item.bio);
+                          }}
+                          className=" p-1 rounded-lg"
+                        >
+                          <RiEyeFill className="w-6 h-6 fill-black" />
+                        </button>
+                      )}
+                    </>
+                  )}
+                </td>
+                <td className="table-cell">
+                  {moment(item?.createdAt).format("DD/MM/YYYY")}
+                </td>
+                <td className="table-cell">{item?.signedUpBy}</td>
+                <td className="table-cell">
+                  {item.isApproved && (
+                    <>
+                      <button
+                        className="bg-green-500 text-white rounded-full py-2 px-5"
+                        disabled
+                      >
+                        Approved
+                      </button>
+                    </>
+                  )}
+                  {!item.isApproved && (
+                    <>
+                      <button
+                        className="bg-red-500 text-white rounded-full py-2 px-5"
+                        disabled
+                      >
+                        Declined
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Modal
@@ -89,28 +158,23 @@ export default function ApprovedTable({ data, headers, heading }) {
           >
             Reason of Inactive
           </Dialog.Title>
-          <div className="my-4">
+          {/* <div className="my-4">
             <h5>Choose Status:</h5>
-            <div className="flex">
-              <input type="radio" name="status" id="inactive" />
-              <label htmlFor="inactive" className="ml-10">
-                Inactive
+            <div className="flex mt-2 items-center">
+              <input type="radio" name="status" id="active" checked />
+              <label htmlFor="active" className="ml-4">
+                Disapprove
               </label>
             </div>
-            <div className="flex">
-              <input type="radio" name="status" id="active" />
-              <label htmlFor="active" className="ml-10">
-                Active
-              </label>
-            </div>
-          </div>
+          </div> */}
           <textarea
-            defaultValue={modalData}
             className="border border-gray-900 rounded-lg my-8 p-4 w-full h-48 resize-none"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
           ></textarea>
           <button
             type="button"
-            onClick={() => {}}
+            onClick={() => handleDisApprove()}
             className="bg-red-600 text-white px-10 py-2 rounded-full text-xl font-semibold block mx-auto"
           >
             Save
@@ -118,6 +182,29 @@ export default function ApprovedTable({ data, headers, heading }) {
         </Modal>
         <ModalOverlay isOpen={isModalOpen} />
       </div>
+      <nav
+        className="flex md:flex-row flex-col justify-between items-center pt-4 mx-5 mb-5 mt-5"
+        aria-label="Table navigation"
+      >
+        <span className="text-sm font-normal text-gray-500 ">
+          Showing{" "}
+          <span className="font-semibold text-gray-900">
+            {`${(currentPage - 1) * 10 + 1}-${Math.min(
+              currentPage * 10,
+              usersData?.totalResults
+            )}`}
+          </span>{" "}
+          of{" "}
+          <span className="font-semibold text-gray-900">
+            {usersData.totalResults}
+          </span>
+        </span>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={usersData.totalPages}
+          handleClick={handleClick}
+        />
+      </nav>
     </>
   );
 }

@@ -1,46 +1,158 @@
+import { useState, useEffect } from "react";
 import { Dialog, Listbox } from "@headlessui/react";
 import Modal from "../Modal";
 import ModalOverlay from "../ModalOverlay";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { RiPencilFill } from "react-icons/ri";
 import { FaChevronDown, FaPlus } from "react-icons/fa";
-const groups = ["Staff", "Technical", "Marketing Executive", "Manager"];
+import { sendInvite } from "@/redux/auth/auth.actions";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { getUsers } from "@/redux/auth/auth.actions";
+import { updateUser } from "@/redux/auth/auth.actions";
+import { getGroup } from "@/redux/features/features.actions";
+import Pagination from "../pagination";
+import moment from "moment";
+
 export default function UserManagementTable({
   heading,
   headers,
   data,
   member,
+  userData,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
-  const [modalData, setModalData] = useState({});
-  const [selectedGroup, setSelectedGroup] = useState(groups[0]);
+  const [loading, setLoading] = useState(false);
+  const [modalData, setModalData] = useState();
+  const usersData = useSelector(({ auth }) => auth.users);
+  const groups = useSelector(({ features }) => features.groups);
+  const [selectedGroup, setSelectedGroup] = useState();
+  const [selectedGroupUpdate, setSelectedGroupUpdate] = useState();
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [group, setGroup] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(10);
+
+  const handleData = (key, value) => {
+    setModalData({ ...modalData, [key]: value });
+  };
+
+  console.log("Selected Group", selectedGroup);
+
+  useEffect(() => {
+    getUsers1(currentPage);
+    dispatch(getGroup());
+  }, []);
+
+  useEffect(() => {
+    if (groups?.results?.length > 0) {
+      setSelectedGroup(groups.results[0]);
+      setSelectedGroupUpdate(groups.results[0]);
+    }
+  }, [groups]);
+
+  const getUsers1 = (page) => {
+    let status = "isApproved";
+    let value = true;
+    dispatch(getUsers(page, member, status, value));
+  };
+
+  const handleLoading = () => {
+    setLoading(false);
+    setIsAddStaffOpen(false);
+    setEmail("");
+    setSelectedGroup(groups.results[0]);
+  };
   function openAddStaffModal() {
     setIsAddStaffOpen(true);
   }
   function closeAddStaffModal() {
     setIsAddStaffOpen(false);
+    setEmail("");
+    setSelectedGroup(groups.results[0]);
   }
   function openModal() {
     setIsModalOpen(true);
   }
   function closeModal() {
     setIsModalOpen(false);
-    setModalData({});
+    setModalData();
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const payload = {
+      email: email,
+      group: selectedGroup.id,
+    };
+    if (email === "") {
+      toast.error("Please enter email", {});
+    } else {
+      console.log("Payload", payload);
+      dispatch(sendInvite(payload, handleLoading));
+    }
+  };
+
+  const handleCallBack = () => {
+    getUsers1();
+    closeModal();
+  };
+
+  const handleUpdate = () => {
+    let id = modalData.id;
+    let payload;
+    if (member === "staff") {
+      payload = {
+        firstName: modalData.firstName,
+        phoneNo: modalData.phoneNo,
+        group: selectedGroupUpdate.id,
+        isActive: modalData.isActive,
+      };
+    } else {
+      payload = {
+        isActive: modalData.isActive,
+      };
+    }
+
+    dispatch(updateUser(payload, id, handleCallBack));
+  };
+
+  const fetchNextRecords = (number) => {
+    getUsers1(number);
+  };
+
+  const handleClick = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    fetchNextRecords(pageNumber);
+  };
+
   return (
     <>
-      <button
-        onClick={openAddStaffModal}
-        className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-20`}
-      >
-        <FaPlus className="inline w-4 h-4 mr-2 " />
-        Add Staff
-      </button>
+      {userData?.group?.permissions?.find(
+        (permission) => permission.route === "User Management"
+      )?.create && (
+        <>
+          {member === "staff" && (
+            <button
+              onClick={openAddStaffModal}
+              className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-20`}
+            >
+              <FaPlus className="inline w-4 h-4 mr-2 " />
+              Add Staff
+            </button>
+          )}
+        </>
+      )}
+
       <div className="flex justify-between">
         <h1 className="font-bold text-2xl text-black mb-4">{heading}</h1>
         <h1 className="font-bold text-2xl text-black mb-4">
-          Total: {data.length}
+          Total: {usersData?.totalResults}
         </h1>
       </div>
       <div className="overflow-auto table-height w-full">
@@ -55,99 +167,45 @@ export default function UserManagementTable({
             </tr>
           </thead>
           <tbody>
-            {(member === "staff" &&
-              data.map(
-                ({
-                  sr_no,
-                  first_name,
-                  title,
-                  email,
-                  phone,
-                  date,
-                  signedup_by,
-                  status,
-                }) => (
-                  <tr key={sr_no} className="even:bg-slate-100 odd:bg-white">
-                    <td className="table-cell">{sr_no}</td>
-                    <td className="table-cell">{first_name}</td>
-                    <td className="table-cell"> {email}</td>
-                    <td className="table-cell"> {phone}</td>
-                    <td className="table-cell"> {title}</td>
-                    <td className="table-cell">
-                      <span
-                        className={`p-3 inline-block w-3 h-3 rounded-full ${
-                          (status === "active" && "bg-green-600") ||
-                          "bg-red-600"
-                        }`}
-                      ></span>
-                    </td>
-                    <td className="table-cell">{date}</td>
-                    <td className="table-cell">{signedup_by}</td>
-                    <td className="table-cell">
-                      <button
-                        onClick={() => {
-                          openModal(),
-                            setModalData({
-                              first_name,
-                              phone,
-                              email,
-                              title,
-                              status,
-                            });
-                        }}
-                        className="bg-black p-1 rounded-lg"
-                      >
-                        <RiPencilFill className="w-6 h-6 fill-white" />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              )) ||
-              data.map(
-                ({
-                  sr_no,
-                  full_name,
-                  email,
-                  phone,
-                  company,
-                  added_on,
-                  member_since,
-                  status,
-                }) => (
-                  <tr key={sr_no} className="even:bg-slate-100 odd:bg-white">
-                    <td className="table-cell">{sr_no}</td>
-                    <td className="table-cell">{full_name}</td>
-                    <td className="table-cell">{email}</td>
-                    <td className="table-cell">{phone}</td>
-                    <td className="table-cell">{company}</td>
-                    <td className="table-cell">{added_on}</td>
-                    <td className="table-cell">{member_since}</td>
-                    <td className="table-cell">
-                      <span
-                        className={`p-3 inline-block w-3 h-3 rounded-full ${
-                          (status === "active" && "bg-green-600") ||
-                          "bg-red-600"
-                        }`}
-                      ></span>
-                    </td>
-                    <td className="table-cell">
-                      <button
-                        onClick={() => {
-                          openModal(),
-                            setModalData({
-                              status,
-                            });
-                        }}
-                        className="bg-black p-1 rounded-lg"
-                      >
-                        <RiPencilFill className="w-6 h-6 fill-white" />
-                      </button>
-                    </td>
-                  </tr>
-                )
-              )}
+            {usersData?.results?.map((item, index) => (
+              <tr key={index} className="even:bg-slate-100 odd:bg-white">
+                <td className="table-cell">
+                  {index + 1 + (currentPage - 1) * recordsPerPage}
+                </td>
+                <td className="table-cell">{item?.firstName}</td>
+                <td className="table-cell"> {item?.email}</td>
+                <td className="table-cell"> {item?.phoneNo}</td>
+                <td className="table-cell"> {item?.group}</td>
+                <td className="table-cell">
+                  <span
+                    className={`p-3 inline-block w-3 h-3 rounded-full ${
+                      item?.isActive ? "bg-green-600" : "bg-red-600"
+                    }`}
+                  ></span>
+                </td>
+                <td className="table-cell">
+                  {moment(item?.createdAt).format("DD/MM/YYYY")}
+                </td>
+                <td className="table-cell">{item?.signedUpBy}</td>
+                <td className="table-cell">
+                  {userData?.group?.permissions?.find(
+                    (permission) => permission.route === "User Management"
+                  )?.update && (
+                    <button
+                      onClick={() => {
+                        openModal(), setModalData(item);
+                      }}
+                      className="bg-red-500 p-1 rounded-lg"
+                    >
+                      <RiPencilFill className="w-6 h-6 fill-white" />
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+
         <Modal
           isOpen={isModalOpen}
           openModal={openModal}
@@ -168,44 +226,95 @@ export default function UserManagementTable({
                 </label>
                 <input
                   type="text"
-                  defaultValue={modalData.first_name}
+                  defaultValue={modalData?.firstName}
                   className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+                  value={modalData?.firstName}
+                  onChange={(e) => handleData("firstName", e.target.value)}
                 />
                 <label htmlFor="display_name" className="mb-2 block">
                   Enter Email Address
                 </label>
                 <input
                   type="text"
-                  defaultValue={modalData.email}
+                  defaultValue={modalData?.email}
                   className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+                  value={modalData?.email}
+                  onChange={(e) => handleData("email", e.target.value)}
                 />
                 <label htmlFor="display_name" className="mb-2 block">
                   Enter Phone Number
                 </label>
                 <input
                   type="text"
-                  defaultValue={modalData.phone}
+                  defaultValue={modalData?.phoneNo}
                   className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+                  value={modalData?.phoneNo}
+                  onChange={(e) => handleData("phoneNo", e.target.value)}
                 />
-                <label htmlFor="display_name" className="mb-2 block">
-                  Enter Title
-                </label>
-                <input
-                  type="text"
-                  defaultValue={modalData.title}
-                  className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
-                />
+                <div className="relative mb-5">
+                  <h5 className="mb-2 block">Select Group</h5>
+                  <Listbox
+                    value={selectedGroupUpdate}
+                    onChange={setSelectedGroupUpdate}
+                  >
+                    <Listbox.Button
+                      className={
+                        "border border-gray-500 rounded-full w-full inline-flex justify-between items-center text-left py-2 px-4"
+                      }
+                    >
+                      {selectedGroupUpdate?.groupName}
+                      <FaChevronDown className=" inline" />
+                    </Listbox.Button>
+                    <Listbox.Options className="absolute bg-white w-full border border-gray-500 rounded-2xl mt-1">
+                      {groups?.results?.map((group, index) => (
+                        <Listbox.Option as={"ul"} key={index} value={group}>
+                          {({ active }) => (
+                            <li
+                              className={` p-2 ${active ? "bg-gray-400" : ""}`}
+                            >
+                              {group?.groupName}
+                            </li>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Listbox>
+                </div>
 
                 <div className="my-4">
                   <h5>Staff Status:</h5>
                   <div className="flex">
-                    <input type="radio" name="status" id="inactive" />
+                    <input
+                      type="radio"
+                      name="status"
+                      id="inactive"
+                      value={false}
+                      checked={modalData?.isActive ? false : true}
+                      onChange={(e) =>
+                        handleData(
+                          "isActive",
+                          e.target.value === "false" ? false : false
+                        )
+                      }
+                    />
                     <label htmlFor="inactive" className="ml-10">
                       Inactive
                     </label>
                   </div>
                   <div className="flex">
-                    <input type="radio" name="status" id="active" />
+                    <input
+                      type="radio"
+                      name="status"
+                      id="active"
+                      value={true}
+                      checked={modalData?.isActive}
+                      onChange={(e) =>
+                        handleData(
+                          "isActive",
+                          e.target.value === "true" ? true : true
+                        )
+                      }
+                    />
                     <label htmlFor="active" className="ml-10">
                       Active
                     </label>
@@ -216,14 +325,14 @@ export default function UserManagementTable({
               <div className="flex justify-between mx-10">
                 <button
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => closeModal()}
                   className="bg-black text-white px-10 py-2 rounded-full text-lg font-semibold inline-block"
                 >
                   Cancel
                 </button>
                 <button
                   type="button"
-                  onClick={() => {}}
+                  onClick={() => handleUpdate()}
                   className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-lg font-semibold inline-block "
                 >
                   Save & Edit
@@ -239,6 +348,14 @@ export default function UserManagementTable({
                     name="status"
                     id="active"
                     className="mr-5"
+                    value={true}
+                    checked={modalData?.isActive}
+                    onChange={(e) =>
+                      handleData(
+                        "isActive",
+                        e.target.value === "true" ? true : true
+                      )
+                    }
                   />
                   <label htmlFor="active">Active</label>
                 </div>
@@ -248,6 +365,14 @@ export default function UserManagementTable({
                     name="status"
                     id="inactive"
                     className="mr-5"
+                    value={false}
+                    checked={modalData?.isActive ? false : true}
+                    onChange={(e) =>
+                      handleData(
+                        "isActive",
+                        e.target.value === "false" ? false : false
+                      )
+                    }
                   />
                   <label htmlFor="inactive">Inactive</label>
                 </div>
@@ -255,7 +380,7 @@ export default function UserManagementTable({
 
               <button
                 type="button"
-                onClick={() => {}}
+                onClick={() => handleUpdate()}
                 className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-lg font-semibold block mx-auto "
               >
                 Save
@@ -280,11 +405,13 @@ export default function UserManagementTable({
             </label>
             <input
               type="text"
-              defaultValue={modalData.first_name}
               className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
 
-            <div className="relative mb-20">
+            <div className="relative mb-5">
               <h5 className="mb-2 block"> Group</h5>
               <Listbox value={selectedGroup} onChange={setSelectedGroup}>
                 <Listbox.Button
@@ -292,15 +419,15 @@ export default function UserManagementTable({
                     "border border-gray-500 rounded-full w-full inline-flex justify-between items-center text-left py-2 px-4"
                   }
                 >
-                  {selectedGroup}
+                  {selectedGroup?.groupName}
                   <FaChevronDown className=" inline" />
                 </Listbox.Button>
                 <Listbox.Options className="absolute bg-white w-full border border-gray-500 rounded-2xl mt-1">
-                  {groups.map((group, index) => (
+                  {groups?.results?.map((group, index) => (
                     <Listbox.Option as={"ul"} key={index} value={group}>
                       {({ active }) => (
                         <li className={` p-2 ${active ? "bg-gray-400" : ""}`}>
-                          {group}
+                          {group?.groupName}
                         </li>
                       )}
                     </Listbox.Option>
@@ -312,14 +439,14 @@ export default function UserManagementTable({
           <div className="flex justify-between mx-10">
             <button
               type="button"
-              onClick={() => {}}
+              onClick={closeAddStaffModal}
               className="bg-black text-white px-10 py-2 rounded-full text-lg font-semibold inline-block"
             >
               Cancel
             </button>
             <button
               type="button"
-              onClick={() => {}}
+              onClick={(e) => handleSubmit(e)}
               className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-lg font-semibold inline-block "
             >
               Send Invite
@@ -328,6 +455,29 @@ export default function UserManagementTable({
         </Modal>
         <ModalOverlay isOpen={isModalOpen || isAddStaffOpen} />
       </div>
+      <nav
+        className="flex md:flex-row flex-col justify-between items-center pt-4 mx-5 mb-5 mt-5"
+        aria-label="Table navigation"
+      >
+        <span className="text-sm font-normal text-gray-500 ">
+          Showing{" "}
+          <span className="font-semibold text-gray-900">
+            {`${(currentPage - 1) * 10 + 1}-${Math.min(
+              currentPage * 10,
+              usersData?.totalResults
+            )}`}
+          </span>{" "}
+          of{" "}
+          <span className="font-semibold text-gray-900">
+            {usersData.totalResults}
+          </span>
+        </span>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={usersData.totalPages}
+          handleClick={handleClick}
+        />
+      </nav>
     </>
   );
 }
