@@ -42,23 +42,23 @@ export default function Chat() {
 
   function openDeleteModal(chat, chatIndex) {
     setIsDeleteOpen(true);
+    console.log(chat);
     setActionOnChat({ chat, chatIndex });
   }
   function closeDeleteModal() {
     setIsDeleteOpen(false);
   }
+  const getChats = async () => {
+    try {
+      const { result } = await chatsRepository.getUserChats(user.id);
+      setChats(result);
+      setFilteredChats(result.filter((chat) => !chat.isClosed));
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    const getChats = async () => {
-      try {
-        const { result } = await chatsRepository.getUserChats(user.id);
-        setChats(result);
-        setFilteredChats(result.filter((chat) => !chat.isClosed));
-        console.log(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     user && getChats();
   }, [user?.id]);
 
@@ -69,7 +69,6 @@ export default function Chat() {
     });
   }, [user]);
   function checkOnlineStatus(chat) {
-    console.log(onlineUsers);
     const chatmember = chat?.senderId?.id;
     const online = onlineUsers.find((user) => user.userId == chatmember);
     return online ? true : false;
@@ -79,11 +78,14 @@ export default function Chat() {
       const chatDeleted = await chatsRepository.deleteChat(
         actionOnChat.chat.id
       );
+      filteredChats.splice(actionOnChat.chatIndex, 1);
       chats.splice(actionOnChat.chatIndex, 1);
-      chats.toast.success("Conversation Deleted Successfully!", {});
+
+      toast.success("Conversation Deleted Successfully!", {});
       closeDeleteModal();
     } catch (error) {
       toast.error(error, {});
+      closeDeleteModal();
     }
   }
   async function updateChat(chat) {
@@ -95,7 +97,9 @@ export default function Chat() {
         actionOnChat?.chat.id,
         payload
       );
-      chats[actionOnChat.chatIndex] = result;
+
+      getChats();
+      console.log(chats);
       toast.success("Conversation has been closed!", {});
       closeEditChatModal();
     } catch (error) {
@@ -103,16 +107,18 @@ export default function Chat() {
     }
   }
   useEffect(() => {
-    console.log(selected);
+    console.log(chats);
     selected == "open"
       ? setFilteredChats((prev) => chats?.filter((chat) => !chat.isClosed))
       : setFilteredChats((prev) => chats?.filter((chat) => chat.isClosed));
-  }, [selected]);
+  }, [selected, chats]);
   useEffect(() => {
-    console.log("online Users reset");
     socket.emit("get-online-users");
     socket.on("online-users", (onlineUsers) => {
       setOnlineUsers(onlineUsers);
+    });
+    socket.on("new-conversation", () => {
+      getChats();
     });
   }, []);
   return (
@@ -219,7 +225,7 @@ export default function Chat() {
             name="close"
             type="checkbox"
             checked={isClosed}
-            onChange={(e) => setIsClosed(e.target.value)}
+            onClick={(e) => setIsClosed((prev) => !prev)}
             className="w-4 h-4 mr-4 mb-4 rounded-full bg-[#F2F2F2] border-gray-300 border outline-gray-400 placeholder:text-sm text-sm"
           />
           <label htmlFor="close" className="inline ">

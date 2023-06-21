@@ -10,7 +10,6 @@ export const customHeaders = {
 };
 
 export const baseUrl = `${baseDomain}`;
-
 const instance = axios.create({
   baseUrl,
   headers: customHeaders,
