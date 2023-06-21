@@ -3,6 +3,8 @@ import Image from "next/image";
 import { MdEmail } from "react-icons/md";
 import Head from "next/head";
 import { useState } from "react";
+import { forgotpasswordrequests } from "@/redux/auth/auth.actions";
+import { useDispatch } from "react-redux";
 
 export default function ForgotPassword() {
   const styles = {
@@ -11,9 +13,20 @@ export default function ForgotPassword() {
     "input-field-icon__left": "w-6 h-6 absolute top-3 left-4",
     "input-field-icon__right": "w-6 h-6 absolute top-3 right-4",
   };
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleLoading = () => {
+    setLoading(false);
+  };
 
   function handleForgotPassword(e) {
     e.preventDefault();
+    const payload = {
+      email: email,
+    };
+    dispatch(forgotpasswordrequests(payload, handleLoading));
   }
   return (
     <>
@@ -33,20 +46,26 @@ export default function ForgotPassword() {
             Forgot Password?
           </h1>
           <div className="form-container mx-6 sm:mx-10 md:mx-20 lg:mx-24 xl:mx-36 2xl:mx-40 bg-white rounded-2xl shadow-md p-6 md:p-8 xl:p-10 mb-32 ">
-            <form className="mb-4 mx-2 sm:mx-5 2xl:mx-10">
+            <form
+              className="mb-4 mx-2 sm:mx-5 2xl:mx-10"
+              onSubmit={(e) => handleForgotPassword(e)}
+            >
               <div className="relative mb-4">
                 <MdEmail className={styles["input-field-icon__left"]} />
                 <input
                   type="email"
                   name="email"
                   id="email"
+                  value={email}
                   placeholder="Enter Email"
                   className={styles["input-field"]}
+                  required
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <button
-                onClick={handleForgotPassword}
-                className="w-full text-white font-medium py-3 rounded-full bg-[#FF001D] hover:bg-[#D51E33]"
+                type="submit"
+                className="w-full text-white font-medium py-3 rounded-full bg-[#D32A3D] hover:bg-[#D51E33]"
               >
                 Verify
               </button>

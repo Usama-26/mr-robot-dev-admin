@@ -1,12 +1,26 @@
 import AuthLayout from "@/layouts/AuthLayout";
 import Image from "next/image";
-
 import Head from "next/head";
 import { useState } from "react";
 import { IoMdEye, IoMdEyeOff, IoMdLock } from "react-icons/io";
+import { useDispatch } from "react-redux";
+import { resetPasswordRequests } from "@/redux/auth/auth.actions";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
 
 export default function ResetPassword() {
+  const router = useRouter();
+  const token = router?.query?.token;
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordVisibleConf, setIsPasswordVisibleconf] = useState(false);
+  const [password, setPassword] = useState("");
+  const [confPassword, setConfPassword] = useState("");
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleLoading = () => {
+    setLoading(false);
+  };
   const styles = {
     "input-field":
       "w-full py-3 pl-12 rounded-full bg-[#F2F2F2] border-gray-300 border outline-gray-400 placeholder:text-sm text-sm",
@@ -16,6 +30,15 @@ export default function ResetPassword() {
 
   function handleResetPassword(e) {
     e.preventDefault();
+    if (password !== confPassword) {
+      toast.error("Password not matched!!", {});
+    } else {
+      const payload = {
+        password: password,
+        token: token,
+      };
+      dispatch(resetPasswordRequests(payload, handleLoading));
+    }
   }
   return (
     <>
@@ -35,7 +58,10 @@ export default function ResetPassword() {
             Reset Password
           </h1>
           <div className="form-container mx-6 sm:mx-10 md:mx-20 lg:mx-24 xl:mx-36 2xl:mx-40 bg-white rounded-2xl shadow-md p-6 md:p-8 xl:p-10 mb-32 ">
-            <form className="mb-4 mx-2 sm:mx-5 2xl:mx-10">
+            <form
+              className="mb-4 mx-2 sm:mx-5 2xl:mx-10"
+              onSubmit={(e) => handleResetPassword(e)}
+            >
               <div className="relative mb-4">
                 <IoMdLock className={styles["input-field-icon__left"]} />
                 <input
@@ -44,6 +70,9 @@ export default function ResetPassword() {
                   id="newPassword"
                   placeholder="Enter Your Password"
                   className={styles["input-field"]}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -59,17 +88,22 @@ export default function ResetPassword() {
               <div className="relative mb-4">
                 <IoMdLock className={styles["input-field-icon__left"]} />
                 <input
-                  type={isPasswordVisible ? "text" : "password"}
+                  type={isPasswordVisibleConf ? "text" : "password"}
                   name="confirm-new-password"
                   id="confirmNewPassword"
                   placeholder="Confirm Password"
                   className={styles["input-field"]}
+                  required
+                  value={confPassword}
+                  onChange={(e) => setConfPassword(e.target.value)}
                 />
                 <button
                   type="button"
-                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                  onClick={() =>
+                    setIsPasswordVisibleconf(!isPasswordVisibleConf)
+                  }
                 >
-                  {isPasswordVisible ? (
+                  {isPasswordVisibleConf ? (
                     <IoMdEyeOff className="w-6 h-6 absolute top-3 right-4" />
                   ) : (
                     <IoMdEye className={styles["input-field-icon__right"]} />
@@ -77,8 +111,8 @@ export default function ResetPassword() {
                 </button>
               </div>
               <button
-                onClick={handleResetPassword}
-                className="w-full text-white font-medium py-3 rounded-full bg-[#FF001D] hover:bg-[#D51E33]"
+                type="submit"
+                className="w-full text-white font-medium py-3 rounded-full bg-[#D32A3D] hover:bg-[#D51E33]"
               >
                 Reset Password
               </button>

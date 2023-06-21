@@ -1,15 +1,19 @@
+import { useState, useEffect } from "react";
 import ContactUsTable from "@/components/ContactUsTable";
 import AppLayout from "@/layouts/AppLayout";
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import messages from "../../json/messages.json";
 import pricings from "../../json/pricings.json";
 import AppPricingTable from "@/components/AppPricingTable";
+import { getContacts } from "@/redux/features/features.actions";
+import { useRouter } from "next/router";
 
 const tabs = ["Contact us Form", "App Pricing Form"];
 export default function Notifications() {
   return (
-    <>
+    <AppLayout>
       <div className="max-w-screen-2xl mx-auto  p-4">
         <Tab.Group defaultIndex={0}>
           <Tab.List className={"flex flex-wrap"}>
@@ -29,14 +33,14 @@ export default function Notifications() {
           </Tab.List>
           <Tab.Panels className={"mt-8"}>
             <Tab.Panel>
-              <ContactUsTable data={messages} />
+              <ContactUsTable />
             </Tab.Panel>
             <Tab.Panel>
-              <AppPricingTable data={pricings} />
+              <AppPricingTable />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
-    </>
+    </AppLayout>
   );
 }

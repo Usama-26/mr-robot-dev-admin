@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import useMediaQuery from "@/hooks/useMediaQuery";
 
@@ -8,8 +9,8 @@ export default function GlassCard({ image, title }) {
       className={` mx-auto w-48 p-8 rounded-md border border-zinc-600 relative `}
     >
       <div>
-        <Image
-          src={`/desktop/${image}.png`}
+        <img
+          src={image}
           alt="Service Image"
           width={100}
           height={100}

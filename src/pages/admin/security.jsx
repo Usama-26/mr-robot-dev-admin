@@ -2,7 +2,7 @@ import AppLayout from "@/layouts/AppLayout";
 
 export default function Security() {
   return (
-    <>
+    <AppLayout>
       <div className="max-w-screen-2xl mx-auto  p-4">
         <div className="flex justify-between">
           <h1 className="font-bold text-2xl text-black mb-4">reCaptcha</h1>
@@ -55,6 +55,6 @@ export default function Security() {
           </table>
         </div>
       </div>
-    </>
+    </AppLayout>
   );
 }

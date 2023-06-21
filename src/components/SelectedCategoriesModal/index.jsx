@@ -8,7 +8,7 @@ export default function SelectedCategoriesModal({
   openModal,
   data,
 }) {
-  const { build, device_features, functionalities, total } = data;
+  const d = data;
 
   return (
     <>
@@ -48,22 +48,26 @@ export default function SelectedCategoriesModal({
                         <h5 className="sticky top-0 font-semibold rounded-t-lg bg-slate-200 px-2">
                           Build
                         </h5>
-                        <div className="flex justify-between px-2">
-                          <h5>{build.name}</h5>
-                          <h5>{build.price}</h5>
-                        </div>
+                        {d?.service?.map((item) => (
+                          <>
+                            <div className="flex justify-between px-2">
+                              <h5>{item.name}</h5>
+                              <h5>{item.price}</h5>
+                            </div>
+                          </>
+                        ))}
                       </div>
                       <div className=" scrollbar-thin h-24 overflow-y-auto">
                         <h5 className=" sticky top-0 font-semibold bg-slate-200 px-2">
                           Device Features
                         </h5>
-                        {device_features.map((feature) => (
+                        {d?.devices?.map((item) => (
                           <div
-                            key={feature.name}
+                            key={item.name}
                             className="flex justify-between px-2"
                           >
-                            <h5>{feature.name}</h5>
-                            <h5>{feature.price}</h5>
+                            <h5>{item.name}</h5>
+                            <h5>{item.price}</h5>
                           </div>
                         ))}
                       </div>
@@ -72,7 +76,7 @@ export default function SelectedCategoriesModal({
                         <h5 className=" sticky top-0 font-semibold bg-slate-200 px-2">
                           Functionalities
                         </h5>
-                        {functionalities.map((functionality) => (
+                        {d?.functionalities?.map((functionality) => (
                           <div
                             key={functionality.name}
                             className="flex justify-between px-2"
@@ -83,10 +87,9 @@ export default function SelectedCategoriesModal({
                         ))}
                       </div>
                     </div>
-
                     <div className="flex font-bold justify-between">
                       <h5>Total</h5>
-                      <h5>R {total}</h5>
+                      <h5>R {d?.total}</h5>
                     </div>
                   </div>
                 </Dialog.Panel>
