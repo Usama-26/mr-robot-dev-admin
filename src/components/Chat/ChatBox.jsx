@@ -143,43 +143,47 @@ export function ChatBox({ socket, chat, currentUser, online }) {
             ))}
           </div>
           <div className="border-t-2 border-gray-200 px-4 py-4 mb-2 sm:mb-0">
-            <div className="relative flex items-center">
-              <InputEmoji
-                borderColor={"#b9b2b2"}
-                value={message}
-                onChange={setMessage}
-              />
-
-              <label
-                for="file-input"
-                class="relative inline-block cursor-pointer"
-              >
-                <ImAttachment className="w-6 h-6 cursor-pointer" />
-                <input
-                  id="file-input"
-                  type="file"
-                  class="hidden"
-                  onChange={handleFileSelect}
-                  accept="image/jpeg, image/png, image/gif"
-                  maxLength={1024 * 1024}
+            {!chat?.isClosed ? (
+              <div className="relative flex items-center">
+                <InputEmoji
+                  borderColor={"#b9b2b2"}
+                  value={message}
+                  onChange={setMessage}
                 />
-              </label>
 
-              <button
-                onClick={(e) => handleSend(e)}
-                type="button"
-                className="h-12 w-12 inline-flex items-center justify-center rounded-full ml-2 px-2 bg-[#D32A3D] ease-in-out text-white focus:outline-none"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  className=" ml-1 h-6 w-6 transform rotate-45"
+                <label
+                  for="file-input"
+                  class="relative inline-block cursor-pointer"
                 >
-                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-                </svg>
-              </button>
-            </div>
+                  <ImAttachment className="w-6 h-6 cursor-pointer" />
+                  <input
+                    id="file-input"
+                    type="file"
+                    class="hidden"
+                    onChange={handleFileSelect}
+                    accept="image/jpeg, image/png, image/gif"
+                    maxLength={1024 * 1024}
+                  />
+                </label>
+
+                <button
+                  onClick={(e) => handleSend(e)}
+                  type="button"
+                  className="h-12 w-12 inline-flex items-center justify-center rounded-full ml-2 px-2 bg-[#D32A3D] ease-in-out text-white focus:outline-none"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    className=" ml-1 h-6 w-6 transform rotate-45"
+                  >
+                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+                  </svg>
+                </button>
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
         </>
       ) : (

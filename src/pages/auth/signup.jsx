@@ -42,7 +42,6 @@ export default function Signup() {
     role: "staff",
     group: "",
     signedUpBy: "Admin",
-    bio: "",
   });
 
   const verifyToken = async () => {
@@ -84,7 +83,6 @@ export default function Signup() {
       role: "staff",
       group: "",
       signedUpBy: "Admin",
-      bio: "",
     };
     setData(defaultD);
   };
