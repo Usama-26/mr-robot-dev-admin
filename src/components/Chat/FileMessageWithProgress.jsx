@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -42,10 +43,15 @@ export function FileMessageWithProgress({
   useEffect(() => {
     if (file && message.attachment === "attachment") uploadFile();
   }, []);
+  console.log(message);
+
   return (
     <div className="w-40">
-      <BsFileImage className="inline w-8 h-8 justify-end" />
-      <span className="block">{message?.message}</span>
+      <a href={message?.attachment} target="_blank" rel="noopener noreferrer">
+        <img src={message?.attachment} alt="" className="w-[200px] h-[200px]" />
+      </a>
+
+      <span className="block mt-1">{message?.message}</span>
       {progress < 100 && (
         <div className="relative h-2 bg-gray-300">
           <div

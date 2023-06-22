@@ -133,7 +133,7 @@ export default function Chat() {
                 selected == "open" ? "bg-[#D32A3D]" : "bg-slate-300"
               }`}
             >
-              Opened Chats
+              New Chat
             </button>
             <button
               onClick={handleSlected}
@@ -142,7 +142,7 @@ export default function Chat() {
                 selected == "close" ? "bg-[#D32A3D]" : "bg-slate-300"
               }`}
             >
-              Closed Chats
+              Closed Chat
             </button>
           </Tab.List>
           <Tab.Panels className={"mt-8"}>
@@ -186,6 +186,7 @@ export default function Chat() {
                           openDeleteModal={openDeleteModal}
                           online={checkOnlineStatus(chat)}
                           index={index}
+                          selected={selected}
                         />
                       </div>
                     ))}
@@ -220,18 +221,20 @@ export default function Chat() {
           Chat Status
         </Dialog.Title>
         <div className="mx-10">
-          <input
-            id="close"
-            name="close"
-            type="checkbox"
-            checked={isClosed}
-            onClick={(e) => setIsClosed((prev) => !prev)}
-            className="w-4 h-4 mr-4 mb-4 rounded-full bg-[#F2F2F2] border-gray-300 border outline-gray-400 placeholder:text-sm text-sm"
-          />
-          <label htmlFor="close" className="inline ">
-            Close Chat
-          </label>
-          <label htmlFor="email" className="block mb-2">
+          <div className="flex items-center">
+            <input
+              id="close"
+              name="close"
+              type="checkbox"
+              checked={isClosed}
+              onClick={(e) => setIsClosed((prev) => !prev)}
+              className="w-4 h-4 mr-4  rounded-full bg-[#F2F2F2] border-gray-300 border outline-gray-400 placeholder:text-sm text-sm"
+            />
+            <label htmlFor="close" className="inline ">
+              Close Chat
+            </label>
+          </div>
+          {/* <label htmlFor="email" className="block mb-2">
             Email Transcript
           </label>
           <div className="flex items-center mb-4">
@@ -255,12 +258,12 @@ export default function Chat() {
                 <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
               </svg>
             </button>
-          </div>
-          <h5 className="mb-4">Download this Chat</h5>
+          </div> */}
+          {/* <h5 className="mb-4">Download this Chat</h5>
           <button className="bg-black text-white rounded-full py-2 px-4">
             <FiDownload className="inline w-6 h-6 mr-2" />
             Download
-          </button>
+          </button> */}
           <button
             onClick={updateChat}
             className="bg-[#D32A3D] text-white text-center rounded-full py-2  block mt-4 w-28 mx-auto "
@@ -288,7 +291,7 @@ export default function Chat() {
             Yes
           </button>
           <button
-            onClick={() => {}}
+            onClick={() => closeDeleteModal()}
             className="text-white inline-block bg-black font-medium px-6 py-2 rounded-full"
           >
             No
