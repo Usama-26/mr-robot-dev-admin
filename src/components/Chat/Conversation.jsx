@@ -8,6 +8,7 @@ export function Conversation({
   openDeleteModal,
   online,
   index,
+  selected,
 }) {
   return (
     <div className="cursor-pointer card p-4 min-w-[400px] flex justify-between items-center gap-4 rounded-lg border border-zinc-300">
@@ -36,9 +37,11 @@ export function Conversation({
             className="w-6 h-6 inline mr-2 "
           />
         </button>
-        <button onClick={() => openDeleteModal(chat, index)}>
-          <RiDeleteBin6Fill className="w-6 h-6 fill-[#d32a3d] inline" />
-        </button>
+        {selected === "close" && (
+          <button onClick={() => openDeleteModal(chat, index)}>
+            <RiDeleteBin6Fill className="w-6 h-6 fill-[#d32a3d] inline" />
+          </button>
+        )}
       </div>
     </div>
   );
