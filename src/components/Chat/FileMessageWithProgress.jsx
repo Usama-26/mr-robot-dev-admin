@@ -14,6 +14,8 @@ export function FileMessageWithProgress({
   userId,
 }) {
   const [progress, setProgress] = useState();
+  const [url, setUrl] = useState("");
+
   const uploadFile = async () => {
     await uploadImage(
       file,
@@ -28,6 +30,8 @@ export function FileMessageWithProgress({
               },
             },
           };
+          console.log("called");
+          setUrl(url);
           console.log(newObj.messageBody.attachment);
           try {
             const { result } = await chatsRepository.createMessage(newObj);
@@ -43,12 +47,19 @@ export function FileMessageWithProgress({
   useEffect(() => {
     if (file && message.attachment === "attachment") uploadFile();
   }, []);
-  console.log(message);
 
   return (
     <div className="w-40">
-      <a href={message?.attachment} target="_blank" rel="noopener noreferrer">
-        <img src={message?.attachment} alt="" className="w-[200px] h-[200px]" />
+      <a
+        href={message?.attachment != "attachment" ? message?.attachment : url}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src={message?.attachment != "attachment" ? message?.attachment : url}
+          alt=""
+          className="w-[200px] h-[200px]"
+        />
       </a>
 
       <span className="block mt-1">{message?.message}</span>

@@ -51,6 +51,8 @@ export function ChatBox({ socket, chat, currentUser, online }) {
     }
   }
   useEffect(() => {
+    setMessage("");
+    setMessages([]);
     setUserData(chat?.senderId);
   }, [chat, currentUser]);
   useEffect(() => {

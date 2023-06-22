@@ -175,7 +175,7 @@ export default function UserManagementTable({
                 <td className="table-cell">{item?.firstName}</td>
                 <td className="table-cell"> {item?.email}</td>
                 <td className="table-cell"> {item?.phoneNo}</td>
-                <td className="table-cell"> {item?.group}</td>
+                <td className="table-cell"> {item?.group?.groupName}</td>
                 <td className="table-cell">
                   <span
                     className={`p-3 inline-block w-3 h-3 rounded-full ${
