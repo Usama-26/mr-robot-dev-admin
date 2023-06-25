@@ -1,6 +1,5 @@
 import axios from "axios";
-const baseDomain =
-  "https://mr-robobt-dev-backend-development.up.railway.app/api";
+const baseDomain = "http://localhost:4000/api";
 
 export const appName = "mrrobotdev";
 

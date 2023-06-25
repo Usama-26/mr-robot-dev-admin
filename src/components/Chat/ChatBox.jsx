@@ -7,6 +7,7 @@ import { ImAttachment } from "react-icons/im";
 import { useRef } from "react";
 import { useState } from "react";
 import InputEmoji from "react-input-emoji";
+import { convertDateAndTime } from "@/utils/chat";
 
 export function ChatBox({ socket, chat, currentUser, online }) {
   const scroll = useRef();
@@ -136,6 +137,9 @@ export function ChatBox({ socket, chat, currentUser, online }) {
                           }`}
                         >
                           {message?.message}
+                          <span className="block text-right">
+                            {convertDateAndTime(message?.time)}
+                          </span>
                         </span>
                       )}
                     </div>

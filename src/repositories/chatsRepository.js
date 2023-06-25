@@ -8,6 +8,7 @@ const routes = {
   getMessages: "/chat/getMessages/",
   deleteChat: "/chat/",
   updateChat: "/chat/",
+  sendChatLink: "/users/send-chatlink",
 };
 
 class ChatsRepositiory {
@@ -87,6 +88,18 @@ class ChatsRepositiory {
       const request = await Repository.put(
         `${baseUrl}${routes.updateChat}${chatId}`,
         updateChat
+      );
+      const { data } = request;
+      return { result: data };
+    } catch (error) {
+      throw getError(error);
+    }
+  }
+  async sendChatLink(chatdata) {
+    try {
+      const request = await Repository.post(
+        `${baseUrl}${routes.sendChatLink}`,
+        chatdata
       );
       const { data } = request;
       return { result: data };
