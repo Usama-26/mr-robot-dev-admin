@@ -22,11 +22,16 @@ export function ChatBox({ socket, chat, currentUser, online }) {
     if (message !== "") {
       const messageObj = {
         chatId: chat.id,
-        messageBody: { author: currentUser, message },
+        messageBody: {
+          author: currentUser,
+          message,
+          time: new Date().toISOString(),
+        },
       };
       try {
         const { result } = await chatsRepository.createMessage(messageObj);
         socket.emit("send-message", chat?.senderId?.id, result);
+        console.log(result);
         setMessages((list) => [...list, result]);
         setMessage("");
       } catch (error) {
@@ -71,7 +76,9 @@ export function ChatBox({ socket, chat, currentUser, online }) {
 
   useEffect(() => {
     socket.once("receive-message", (data) => {
-      setMessages([...messages, data]);
+      if (data?.author == chat?.senderId?.id) {
+        setMessages([...messages, data]);
+      }
     });
     scroll?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
