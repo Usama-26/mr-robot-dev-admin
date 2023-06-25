@@ -68,13 +68,13 @@ function* loginSaga(action) {
     localStorage.setItem("IsLoggedIN", true);
     yield put(loginSuccess(_user, _tokens));
     yield put(getUserSuccess(_user));
-    action.callback();
+    action.callback("Logged in Successfully", "success");
     Router.push("/admin");
-    toast.success("Logged in Successfully", {});
+    // toast.success("Logged in Successfully", {});
   } catch (error) {
     if (action && action.callback) {
-      action.callback();
-      toast.error(error, {});
+      action.callback(error, "error");
+      // toast.error(error, {});
       // errorNotification("Error", error);
     }
   } finally {

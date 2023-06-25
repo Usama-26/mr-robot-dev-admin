@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import messages from "../../json/messages.json";
 import pricings from "../../json/pricings.json";
 import AppPricingTable from "@/components/AppPricingTable";
+import LiveChatFormTable from "@/components/LiveChatFormTable";
 import { getContacts } from "@/redux/features/features.actions";
 import { useRouter } from "next/router";
 
-const tabs = ["Contact us Form", "App Pricing Form"];
+const tabs = ["Contact us Form", "App Pricing Form", "Live Chat Form"];
 export default function Notifications() {
   return (
     <AppLayout>
@@ -37,6 +38,9 @@ export default function Notifications() {
             </Tab.Panel>
             <Tab.Panel>
               <AppPricingTable />
+            </Tab.Panel>
+            <Tab.Panel>
+              <LiveChatFormTable />
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>

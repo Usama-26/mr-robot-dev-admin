@@ -9,6 +9,7 @@ const TABLE_HEAD = [
   "Sr.No",
   "Email",
   "Full Name",
+  "Phone",
   "Total Price",
   "Date",
   "Selected Categories",
@@ -74,6 +75,7 @@ export default function AppPricingTable({ data }) {
                     </td>
                     <td className="table-cell">{item?.email}</td>
                     <td className="table-cell"> {item?.fullName}</td>
+                    <td className="table-cell"> {item?.phoneNo}</td>
                     <td className="table-cell">
                       {" "}
                       {item?.appPricing?.totalPrice}

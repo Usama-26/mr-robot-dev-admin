@@ -7,6 +7,8 @@ export const initState = {
   groups: [],
   newsLetter: [],
   stats: [],
+  newsletterData: [],
+  captcha: [],
 };
 
 function FeaturesReducer(state = initState, action) {
@@ -36,10 +38,20 @@ function FeaturesReducer(state = initState, action) {
         ...state,
         ...{ newsLetter: action.itemsResult },
       };
+    case featuresActionTypes.GET_NEWSLETTER_DATA_SUCCESS:
+      return {
+        ...state,
+        ...{ newsletterData: action.itemsResult },
+      };
     case featuresActionTypes.GET_STATS_SUCCESS:
       return {
         ...state,
         ...{ stats: action.itemsResult },
+      };
+    case featuresActionTypes.GET_CAPTCHA_SUCCESS:
+      return {
+        ...state,
+        ...{ captcha: action.itemsResult },
       };
 
     default:

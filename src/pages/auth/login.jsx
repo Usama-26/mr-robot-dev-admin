@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import AuthLayout from "@/layouts/AuthLayout";
 import Image from "next/image";
 import { RiUserFill } from "react-icons/ri";
@@ -9,9 +10,16 @@ import { loginRequest } from "../../redux/auth/auth.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { withAuthLogin } from "@/components/Helpers/withAuthLogin";
+import ModalSuccess from "@/components/ModalSuccess";
+import ModalError from "@/components/ModalError";
+import { Dialog } from "@headlessui/react";
+import ModalOverlay from "@/components/ModalOverlay";
 
 const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isSuccessModal, setIsSuccessModal] = useState(false);
+  const [isErrorModal, setIsErrorModal] = useState(false);
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const styles = {
     "input-field":
@@ -31,8 +39,14 @@ const Login = () => {
     setData({ ...data, [key]: value });
   };
 
-  const handleLoading = () => {
+  const handleLoading = (value, type) => {
     setLoading(false);
+    setMessage(value);
+    if (type === "success") {
+      openSuccessModal();
+    } else {
+      openErrorModal();
+    }
   };
 
   const handleLoginSubmit = (e) => {
@@ -44,6 +58,20 @@ const Login = () => {
   const handleRouter = () => {
     router.push("/admin");
   };
+
+  function openSuccessModal() {
+    setIsSuccessModal(true);
+  }
+  function closeSuccessModal() {
+    setIsSuccessModal(false);
+  }
+  function openErrorModal() {
+    setIsErrorModal(true);
+  }
+  function closeErrorModal() {
+    setIsErrorModal(false);
+  }
+
   return (
     <>
       <Head>
@@ -127,6 +155,18 @@ const Login = () => {
             </p>
           </div>
         </div>
+        <ModalSuccess
+          isOpen={isSuccessModal}
+          openModal={openSuccessModal}
+          closeModal={closeSuccessModal}
+          message={message}
+        />
+        <ModalError
+          isOpen={isErrorModal}
+          openModal={openErrorModal}
+          closeModal={closeErrorModal}
+          message={message}
+        />
       </AuthLayout>
     </>
   );

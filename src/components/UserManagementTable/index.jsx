@@ -270,7 +270,9 @@ export default function UserManagementTable({
                         <Listbox.Option as={"ul"} key={index} value={group}>
                           {({ active }) => (
                             <li
-                              className={` p-2 ${active ? "bg-gray-400" : ""}`}
+                              className={` p-2 ${
+                                active ? "bg-gray-400 rounded-2xl" : ""
+                              }`}
                             >
                               {group?.groupName}
                             </li>
@@ -426,7 +428,11 @@ export default function UserManagementTable({
                   {groups?.results?.map((group, index) => (
                     <Listbox.Option as={"ul"} key={index} value={group}>
                       {({ active }) => (
-                        <li className={` p-2 ${active ? "bg-gray-400" : ""}`}>
+                        <li
+                          className={` p-2 ${
+                            active ? "bg-gray-400 rounded-2xl" : ""
+                          }`}
+                        >
                           {group?.groupName}
                         </li>
                       )}

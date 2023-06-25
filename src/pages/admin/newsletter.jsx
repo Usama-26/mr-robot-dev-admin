@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from "react";
 import Modal from "@/components/Modal";
 import ModalOverlay from "@/components/ModalOverlay";
@@ -11,9 +12,15 @@ import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { baseUrl } from "@/repositories/genericRepository";
+import NewsletterCard from "@/components/NewsletterCard";
 import { toast } from "react-toastify";
 import Pagination from "@/components/pagination";
 import moment from "moment";
+import { FaPlus } from "react-icons/fa";
+import {
+  getNewsletterData,
+  addNewsletter,
+} from "@/redux/features/features.actions";
 
 const Newsletter = (props) => {
   const userData = props.userData;
@@ -25,8 +32,35 @@ const Newsletter = (props) => {
   const [currentPageUnsub, setCurrentPageUnsub] = useState(1);
   const [recordsPerPage] = useState(10);
   const [tab, selectedTab] = useState("subscribed");
+  const [isAddBlogModal, setIsAddBlogModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [reason, setReason] = useState("");
   const dispatch = useDispatch();
+  const blogs = useSelector(({ features }) => features.newsletterData);
+
+  const [payloaddata, setPayloadData] = useState({
+    name: "",
+    description: "",
+  });
+
+  const handleData = (key, value) => {
+    setPayloadData({ ...payloaddata, [key]: value });
+  };
+
+  useEffect(() => {
+    getnewsletterdata();
+  }, []);
+
+  const getnewsletterdata = () => {
+    dispatch(getNewsletterData());
+  };
+
+  function openAddBlogModal() {
+    setIsAddBlogModal(true);
+  }
+  function closeAddBlogModal() {
+    setIsAddBlogModal(false);
+  }
 
   function openModal() {
     setIsModalOpen(true);
@@ -86,6 +120,24 @@ const Newsletter = (props) => {
     fetchNextRecords("unsubscribed", pageNumber);
   };
 
+  const handleLoading = () => {
+    setLoading(false);
+    closeAddBlogModal();
+    dispatch(getNewsletterData());
+    let defaultValue = {
+      name: "",
+      description: "",
+    };
+    setPayloadData(defaultValue);
+  };
+
+  const handleDataSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log("Payload Data", payloaddata);
+    dispatch(addNewsletter(payloaddata, handleLoading));
+  };
+
   return (
     <AppLayout>
       <div className="max-w-screen-2xl mx-auto  p-4">
@@ -118,6 +170,21 @@ const Newsletter = (props) => {
                   }}
                 >
                   Unsubscribed
+                </button>
+              )}
+            </Tab>
+            <Tab as={Fragment}>
+              {({ selected }) => (
+                <button
+                  className={`lg:px-10 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium hover:bg-[#D32A3D] focus:outline-none ${
+                    selected ? "bg-[#D32A3D]" : "bg-slate-300"
+                  }`}
+                  // onClick={() => {
+                  //   getnewsletter("unsubscribed", currentPageUnsub),
+                  //     setCurrentPage(1);
+                  // }}
+                >
+                  Manage Newsletter
                 </button>
               )}
             </Tab>
@@ -310,6 +377,82 @@ const Newsletter = (props) => {
                 </nav>
               </>
             </Tab.Panel>
+            <Tab.Panel>
+              <div className="max-w-screen-2xl mx-auto  p-4">
+                <div className="flex justify-between items-center mb-6 ">
+                  <h1 className="font-bold text-2xl text-black mb-4">
+                    Manage Newsletters
+                  </h1>
+                  {userData?.group?.permissions?.find(
+                    (permission) => permission.route === "Newsletter Screen"
+                  )?.create && (
+                    <button
+                      onClick={openAddBlogModal}
+                      className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both`}
+                    >
+                      <FaPlus className="inline w-4 h-4 mr-2 " />
+                      Add Newsletter
+                    </button>
+                  )}
+                </div>
+                <div className="grid 2xl:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-8 ">
+                  {blogs?.results?.map((blog) => (
+                    <>
+                      <NewsletterCard data={blog} userData={userData} />
+                    </>
+                  ))}
+                </div>
+              </div>
+              <Modal
+                isOpen={isAddBlogModal}
+                openModal={openAddBlogModal}
+                closeModal={closeAddBlogModal}
+              >
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-black text-center mb-4"
+                >
+                  Add New Newsletter
+                </Dialog.Title>
+                <form action="" onSubmit={(e) => handleDataSubmit(e)}>
+                  <label
+                    htmlFor="blog_heading"
+                    className="mb-2 block font-bold"
+                  >
+                    Newsletter Heading
+                  </label>
+                  <input
+                    type="text"
+                    id="blog_heading"
+                    placeholder="Enter newsletter heading here"
+                    className="w-full px-4 py-2 rounded-full border border-gray-500 mb-4"
+                    value={payloaddata.name}
+                    onChange={(e) => handleData("name", e.target.value)}
+                    required
+                  />
+                  <label
+                    htmlFor="blog_heading"
+                    className="mb-2 block font-bold"
+                  >
+                    Newsletter Content
+                  </label>
+                  <textarea
+                    placeholder="Enter text here"
+                    className="border border-gray-500 rounded-lg p-4 mb-4 w-full h-48 resize-none"
+                    value={payloaddata.description}
+                    onChange={(e) => handleData("description", e.target.value)}
+                    required
+                  ></textarea>
+
+                  <button
+                    type="submit"
+                    className="bg-[#D32A3D] text-white px-10 py-2 rounded-full text-xl font-semibold block mx-auto"
+                  >
+                    Save
+                  </button>
+                </form>
+              </Modal>
+            </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
       </div>
@@ -337,7 +480,7 @@ const Newsletter = (props) => {
           )}
         </div>
       </Modal>
-      <ModalOverlay isOpen={isModalOpen} />
+      <ModalOverlay isOpen={isModalOpen || isAddBlogModal} />
     </AppLayout>
   );
 };

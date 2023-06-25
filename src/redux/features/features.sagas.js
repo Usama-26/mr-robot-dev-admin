@@ -18,6 +18,8 @@ import {
   getGroupSuccess,
   getNewsLetterSuccess,
   getStatsSuccess,
+  getNewsletterDataSuccess,
+  getCaptchaSuccess,
 } from "./features.actions";
 
 function* getPricingItemsSaga() {
@@ -46,6 +48,19 @@ function* getBlogsSaga() {
   }
 }
 
+function* getNewsletterDataSaga() {
+  try {
+    let _items;
+    const { results } = yield call(FeaturesService.getNewsletterData);
+    _items = results;
+    yield put(getNewsletterDataSuccess(_items));
+  } catch (error) {
+    console.log("Error: ", error);
+  } finally {
+    yield cancel();
+  }
+}
+
 function* addBlogsSaga(action) {
   try {
     const { results } = yield call(FeaturesService.addBlogs, action.payload);
@@ -57,6 +72,42 @@ function* addBlogsSaga(action) {
       action.callback();
       toast.error(error, {});
     }
+  } finally {
+    yield cancel();
+  }
+}
+
+function* addNewsletterSaga(action) {
+  try {
+    const { results } = yield call(
+      FeaturesService.addNewsletter,
+      action.payload
+    );
+    toast.success("Newsletter Added Successfully", {});
+    action.callback();
+  } catch (error) {
+    if (action && action.callback) {
+      console.log("Error: ", error);
+      action.callback();
+      toast.error(error, {});
+    }
+  } finally {
+    yield cancel();
+  }
+}
+
+function* updateNewsletterSaga(action) {
+  try {
+    const { results } = yield call(
+      FeaturesService.updateNewsletter,
+      action.payload,
+      action.id
+    );
+    toast.success("Newsletter Updated Successfully", {});
+    action.callback();
+  } catch (error) {
+    console.log("Error: ", error);
+    toast.error(error, {});
   } finally {
     yield cancel();
   }
@@ -174,6 +225,19 @@ function* getStatsSaga(action) {
   }
 }
 
+function* getCaptchaSaga(action) {
+  try {
+    let _items;
+    const { results } = yield call(FeaturesService.getCaptcha, action.page);
+    _items = results;
+    yield put(getCaptchaSuccess(_items));
+  } catch (error) {
+    console.log("Error: ", error);
+  } finally {
+    yield cancel();
+  }
+}
+
 function* addGroupSaga(action) {
   try {
     const { results } = yield call(FeaturesService.addGroup, action.payload);
@@ -208,4 +272,12 @@ export default function* rootSagas() {
   yield all([takeEvery(featuresActionTypes.GET_GROUP, getGroupSaga)]);
   yield all([takeEvery(featuresActionTypes.GET_NEWSLETTER, getNewsLetterSaga)]);
   yield all([takeEvery(featuresActionTypes.GET_STATS, getStatsSaga)]);
+  yield all([
+    takeEvery(featuresActionTypes.GET_NEWSLETTER_DATA, getNewsletterDataSaga),
+  ]);
+  yield all([takeEvery(featuresActionTypes.ADD_NEWSLETTER, addNewsletterSaga)]);
+  yield all([
+    takeEvery(featuresActionTypes.UPDATE_NEWSLETTER, updateNewsletterSaga),
+  ]);
+  yield all([takeEvery(featuresActionTypes.GET_CAPTCHA, getCaptchaSaga)]);
 }
