@@ -118,7 +118,7 @@ const BlogManagement = (props) => {
             </button>
           )}
         </div>
-        <div className="grid 2xl:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 gap-8 ">
+        <div className="grid 2xl:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-8 ">
           {blogs?.map((blog) => (
             <>
               <BlogCard data={blog} userData={userData} />

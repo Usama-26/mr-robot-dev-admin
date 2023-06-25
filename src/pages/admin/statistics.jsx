@@ -74,7 +74,7 @@ const Statistics = () => {
                   <table className="w-full min-w-max table-auto text-left border-collapse">
                     <thead className="bg-indigo-950 sticky top-0">
                       <tr>
-                        {["S.No", "IP Address", "Country", "Date"].map(
+                        {["S.No", "IP Address", "Country", "Time", "Date"].map(
                           (header) => (
                             <th key={header} className="table-header">
                               {header}
@@ -92,6 +92,9 @@ const Statistics = () => {
                             </td>
                             <td className="table-cell">{item.ipAddress}</td>
                             <td className="table-cell">{item.country}</td>
+                            <td className="table-cell">
+                              {moment(item.createdAt).format("LT")}
+                            </td>
                             <td className="table-cell">
                               {moment(item.createdAt).format("DD/MM/YYYY")}
                             </td>

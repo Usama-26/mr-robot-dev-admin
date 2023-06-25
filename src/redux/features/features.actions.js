@@ -42,6 +42,24 @@ export function updateBlogs(payload, id, callback) {
   };
 }
 
+export function getNewsletterData() {
+  return { type: featuresActionTypes.GET_NEWSLETTER_DATA };
+}
+export function getNewsletterDataSuccess(itemsResult) {
+  return { type: featuresActionTypes.GET_NEWSLETTER_DATA_SUCCESS, itemsResult };
+}
+export function addNewsletter(payload, callback) {
+  return { type: featuresActionTypes.ADD_NEWSLETTER, payload, callback };
+}
+export function updateNewsletter(payload, id, callback) {
+  return {
+    type: featuresActionTypes.UPDATE_NEWSLETTER,
+    payload,
+    id,
+    callback,
+  };
+}
+
 export function addGroup(payload, callback) {
   return { type: featuresActionTypes.ADD_GROUP, payload, callback };
 }
@@ -65,4 +83,11 @@ export function getStats(page) {
 }
 export function getStatsSuccess(itemsResult) {
   return { type: featuresActionTypes.GET_STATS_SUCCESS, itemsResult };
+}
+
+export function getCaptcha(page) {
+  return { type: featuresActionTypes.GET_CAPTCHA, page };
+}
+export function getCaptchaSuccess(itemsResult) {
+  return { type: featuresActionTypes.GET_CAPTCHA_SUCCESS, itemsResult };
 }

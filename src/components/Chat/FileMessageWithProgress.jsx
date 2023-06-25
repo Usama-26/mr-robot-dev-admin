@@ -6,6 +6,7 @@ import { BsFileImage } from "react-icons/bs";
 import { uploadImage } from "../FileUploader/ImageUpload";
 import alert from "../Notification/Alert";
 import chatsRepository from "@/repositories/chatsRepository";
+import { convertDateAndTime, convertMessageToShortName } from "@/utils/chat";
 export function FileMessageWithProgress({
   socket,
   chatId,
@@ -62,7 +63,12 @@ export function FileMessageWithProgress({
         />
       </a>
 
-      <span className="block mt-1">{message?.message}</span>
+      <span className="block mt-1">
+        {convertMessageToShortName(message?.message)}
+      </span>
+      <span className="block text-right">
+        {convertDateAndTime(message?.time)}
+      </span>
       {progress < 100 && (
         <div className="relative h-2 bg-gray-300">
           <div

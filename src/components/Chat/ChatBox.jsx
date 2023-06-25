@@ -7,6 +7,7 @@ import { ImAttachment } from "react-icons/im";
 import { useRef } from "react";
 import { useState } from "react";
 import InputEmoji from "react-input-emoji";
+import { convertDateAndTime } from "@/utils/chat";
 
 export function ChatBox({ socket, chat, currentUser, online }) {
   const scroll = useRef();
@@ -21,11 +22,16 @@ export function ChatBox({ socket, chat, currentUser, online }) {
     if (message !== "") {
       const messageObj = {
         chatId: chat.id,
-        messageBody: { author: currentUser, message },
+        messageBody: {
+          author: currentUser,
+          message,
+          time: new Date().toISOString(),
+        },
       };
       try {
         const { result } = await chatsRepository.createMessage(messageObj);
         socket.emit("send-message", chat?.senderId?.id, result);
+        console.log(result);
         setMessages((list) => [...list, result]);
         setMessage("");
       } catch (error) {
@@ -70,7 +76,9 @@ export function ChatBox({ socket, chat, currentUser, online }) {
 
   useEffect(() => {
     socket.once("receive-message", (data) => {
-      setMessages([...messages, data]);
+      if (data?.author == chat?.senderId?.id) {
+        setMessages([...messages, data]);
+      }
     });
     scroll?.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -136,6 +144,9 @@ export function ChatBox({ socket, chat, currentUser, online }) {
                           }`}
                         >
                           {message?.message}
+                          <span className="block text-right">
+                            {convertDateAndTime(message?.time)}
+                          </span>
                         </span>
                       )}
                     </div>

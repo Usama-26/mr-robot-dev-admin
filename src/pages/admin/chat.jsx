@@ -26,6 +26,7 @@ export default function Chat() {
   const [actionOnChat, setActionOnChat] = useState({});
   const [selected, setSelected] = useState("open");
   const [isClosed, setIsClosed] = useState(false);
+  const [emailTranscript, setEmailTranscript] = useState(false);
 
   function handleSlected(e) {
     setSelected(e.target.name);
@@ -88,7 +89,7 @@ export default function Chat() {
       closeDeleteModal();
     }
   }
-  async function updateChat(chat) {
+  async function updateChat() {
     try {
       const payload = {
         isClosed: isClosed,
@@ -100,10 +101,22 @@ export default function Chat() {
 
       getChats();
       console.log(chats);
-      toast.success("Conversation has been closed!", {});
+      toast.success("Conversation satus has been updated!", {});
       closeEditChatModal();
     } catch (error) {
       toast.error(error, {});
+    }
+    console.log(emailTranscript);
+    if (emailTranscript) {
+      console.log("email transcript sended");
+      const payload = {
+        chat: actionOnChat?.chat,
+      };
+      try {
+        await chatsRepository.sendChatLink(payload);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   useEffect(() => {
@@ -232,6 +245,22 @@ export default function Chat() {
             />
             <label htmlFor="close" className="inline ">
               Close Chat
+            </label>
+          </div>
+          <div className="w-full text-center  mt-4">
+            <label className="relative inline-flex items-center mb-5 cursor-pointer">
+              <span className="mr-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                Email transcript
+              </span>
+              <input
+                type="checkbox"
+                value={emailTranscript}
+                className="sr-only peer"
+                onChange={() => {
+                  setEmailTranscript((prev) => !prev);
+                }}
+              />
+              <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-100 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:right-[18px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-black"></div>
             </label>
           </div>
           {/* <label htmlFor="email" className="block mb-2">

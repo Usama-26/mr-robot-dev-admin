@@ -110,10 +110,12 @@ export default function PermissionsTable({ headers, userData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isGroupUsersOpen, setIsGroupUsersOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalData, setModalData] = useState();
-  const [selectedGroup, setSelectedGroup] = useState();
   const usersData = useSelector(({ features }) => features.groups);
+  const [selectedGroup, setSelectedGroup] = useState();
+  const [selectedGroupCopy, setSelectedGroupCopy] = useState();
   const router = useRouter();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -122,6 +124,7 @@ export default function PermissionsTable({ headers, userData }) {
   const [updatedAccess, setUpdatedAccess] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
+  const [groupUsers, setGroupUsers] = useState([]);
 
   const handleData = (key, value) => {
     setModalData({ ...modalData, [key]: value });
@@ -132,6 +135,12 @@ export default function PermissionsTable({ headers, userData }) {
   useEffect(() => {
     getgroup(currentPage);
   }, []);
+
+  useEffect(() => {
+    if (selectedGroupCopy) {
+      setUsersAccess(selectedGroupCopy.permissions);
+    }
+  }, [selectedGroupCopy]);
 
   const getgroup = (page) => {
     dispatch(getGroup(page));
@@ -185,6 +194,13 @@ export default function PermissionsTable({ headers, userData }) {
   }
   function closeDeleteModal() {
     setIsDeleteOpen(false);
+  }
+
+  function openGroupUsersModal() {
+    setIsGroupUsersOpen(true);
+  }
+  function closeGroupUsersModal() {
+    setIsGroupUsersOpen(false);
   }
 
   const handleSubmit = (e) => {
@@ -301,6 +317,16 @@ export default function PermissionsTable({ headers, userData }) {
     }
   };
 
+  const getGroupUsers = async (id) => {
+    openGroupUsersModal();
+    try {
+      const { data } = await axios.get(`${baseUrl}/permissions/users/${id}`);
+      setGroupUsers(data);
+    } catch (e) {
+      console.log("Error", e);
+    }
+  };
+
   return (
     <div className="mt-10">
       <div className="flex justify-between items-center">
@@ -339,7 +365,10 @@ export default function PermissionsTable({ headers, userData }) {
                 </td>
                 <td className="table-cell">{item?.groupName}</td>
                 <td className="table-cell">
-                  <button className="bg-black rounded-full px-2.5 py-1.5 text-white">
+                  <button
+                    className="bg-black rounded-full px-2.5 py-1.5 text-white"
+                    onClick={() => getGroupUsers(item.id)}
+                  >
                     View Details
                   </button>
                 </td>
@@ -554,30 +583,38 @@ export default function PermissionsTable({ headers, userData }) {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            {/* <div className="relative mb-20">
-              <h5 className="mb-2 block"> Group</h5>
-              <Listbox value={selectedGroup} onChange={setSelectedGroup}>
-                <Listbox.Button
-                  className={
-                    "border border-gray-500 rounded-full w-full inline-flex justify-between items-center text-left py-2 px-4"
-                  }
+            {!modalData && (
+              <>
+                <Listbox
+                  value={selectedGroupCopy}
+                  onChange={setSelectedGroupCopy}
                 >
-                  {selectedGroup}
-                  <FaChevronDown className=" inline" />
-                </Listbox.Button>
-                <Listbox.Options className="absolute bg-white w-full border border-gray-500 rounded-2xl mt-1">
-                  {groups.map((group, index) => (
-                    <Listbox.Option as={"ul"} key={index} value={group}>
-                      {({ active }) => (
-                        <li className={` p-2 ${active ? "bg-gray-400" : ""}`}>
-                          {group}
-                        </li>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Listbox>
-            </div> */}
+                  <Listbox.Button
+                    className={
+                      "border border-gray-500 rounded-full w-full inline-flex justify-between items-center text-left py-2 px-4"
+                    }
+                  >
+                    {selectedGroupCopy?.groupName || "Select Group"}
+                    <FaChevronDown className=" inline" />
+                  </Listbox.Button>
+                  <Listbox.Options className=" bg-white w-full border border-gray-500 rounded-2xl mt-1">
+                    {usersData?.results?.map((group, index) => (
+                      <Listbox.Option as={"ul"} key={index} value={group}>
+                        {({ active }) => (
+                          <li
+                            className={` p-2 ${
+                              active ? "bg-gray-400 rounded-xl" : ""
+                            }`}
+                          >
+                            {group?.groupName}
+                          </li>
+                        )}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                </Listbox>
+              </>
+            )}
           </div>
           <div className="flex justify-center mx-10">
             {modalData ? (
@@ -631,7 +668,42 @@ export default function PermissionsTable({ headers, userData }) {
             </button>
           </div>
         </Modal>
-        <ModalOverlay isOpen={isModalOpen || isAddStaffOpen || isDeleteOpen} />
+        <Modal
+          isOpen={isGroupUsersOpen}
+          openModal={openGroupUsersModal}
+          closeModal={closeGroupUsersModal}
+        >
+          <Dialog.Title
+            as="h3"
+            className="text-2xl font-bold leading-6 text-black text-center"
+          >
+            Staff Group
+          </Dialog.Title>
+          <div className="mt-2 rounded-lg p-4 border">
+            <div className="flex font-bold justify-between ">
+              <h5>Total Group Employes</h5>
+              <h5>{groupUsers?.length}</h5>
+            </div>
+            <div className="rounded-lg border border-zinc-400 mt-2">
+              <div className="h-80 overflow-y-auto">
+                {groupUsers?.map((item) => (
+                  <>
+                    <div className="flex px-2  border-b border-gray-700 py-2">
+                      <h5>
+                        {item.firstName} {item.surName}
+                      </h5>
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Modal>
+        <ModalOverlay
+          isOpen={
+            isModalOpen || isAddStaffOpen || isDeleteOpen || isGroupUsersOpen
+          }
+        />
       </div>
       <nav
         className="flex md:flex-row flex-col justify-between items-center pt-4 mx-5 mb-5 mt-5"
