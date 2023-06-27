@@ -106,9 +106,11 @@ export default function ApprovalsTable({ headers, heading, role, userData }) {
                     </td>
                     {/* {status && <td className="table-cell">{status}</td>} */}
                     <td className="table-cell">
-                      {userData?.group?.permissions?.find(
-                        (permission) => permission.route === "Signup Approvals"
-                      )?.update && (
+                      {(userData.role === "admin" ||
+                        userData?.group?.permissions?.find(
+                          (permission) =>
+                            permission.route === "Signup Approvals"
+                        )?.update) && (
                         <>
                           {" "}
                           <button

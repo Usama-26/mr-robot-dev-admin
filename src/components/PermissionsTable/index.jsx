@@ -333,9 +333,10 @@ export default function PermissionsTable({ headers, userData }) {
         <h1 className="font-bold text-2xl text-black mb-4">
           Users Permissions
         </h1>
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Permissions Screen"
-        )?.create && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Permissions Screen"
+          )?.create) && (
           <button
             onClick={openAddStaffModal}
             className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-5`}
@@ -373,9 +374,10 @@ export default function PermissionsTable({ headers, userData }) {
                   </button>
                 </td>
                 <td className="table-cell">
-                  {userData?.group?.permissions?.find(
-                    (permission) => permission.route === "Permissions Screen"
-                  )?.update && (
+                  {(userData.role === "admin" ||
+                    userData?.group?.permissions?.find(
+                      (permission) => permission.route === "Permissions Screen"
+                    )?.update) && (
                     <button
                       onClick={() => {
                         openAddStaffModal(), mapUpdateData(item);
@@ -386,9 +388,10 @@ export default function PermissionsTable({ headers, userData }) {
                     </button>
                   )}
 
-                  {userData?.group?.permissions?.find(
-                    (permission) => permission.route === "Permissions Screen"
-                  )?.delete && (
+                  {(userData.role === "admin" ||
+                    userData?.group?.permissions?.find(
+                      (permission) => permission.route === "Permissions Screen"
+                    )?.delete) && (
                     <button
                       onClick={() => {
                         openDeleteModal(item);

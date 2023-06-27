@@ -85,9 +85,10 @@ export default function NewsletterCard({ data, userData }) {
             {data?.description}
           </p>
           <div className=" mx-auto w-56 flex justify-between mt-4">
-            {userData?.group?.permissions?.find(
-              (permission) => permission.route === "Newsletter Screen"
-            )?.update && (
+            {(userData.role === "admin" ||
+              userData?.group?.permissions?.find(
+                (permission) => permission.route === "Newsletter Screen"
+              )?.update) && (
               <button
                 onClick={openEditBlogModal}
                 className="text-white inline-block bg-[#00AD45] font-medium px-8 py-2 rounded-full"
@@ -96,9 +97,10 @@ export default function NewsletterCard({ data, userData }) {
               </button>
             )}
 
-            {userData?.group?.permissions?.find(
-              (permission) => permission.route === "Newsletter Screen"
-            )?.delete && (
+            {(userData.role === "admin" ||
+              userData?.group?.permissions?.find(
+                (permission) => permission.route === "Newsletter Screen"
+              )?.delete) && (
               <button
                 onClick={openDeleteModal}
                 className="text-white inline-block bg-[#D32A3D] font-medium px-6 py-2 rounded-full"

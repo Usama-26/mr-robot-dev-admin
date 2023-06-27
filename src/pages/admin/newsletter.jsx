@@ -229,10 +229,11 @@ const Newsletter = (props) => {
                               {moment(item.createdAt).format("DD/MM/YYYY")}
                             </td>
                             <td className="table-cell">
-                              {userData?.group?.permissions?.find(
-                                (permission) =>
-                                  permission.route === "Newsletter Screen"
-                              )?.update && (
+                              {(userData.role === "admin" ||
+                                userData?.group?.permissions?.find(
+                                  (permission) =>
+                                    permission.route === "Newsletter Screen"
+                                )?.update) && (
                                 <button
                                   onClick={() => {
                                     openModal(), setModalData(item);
@@ -330,10 +331,11 @@ const Newsletter = (props) => {
                               {item?.unsubscribedBy}
                             </td>
                             <td className="table-cell">
-                              {userData?.group?.permissions?.find(
-                                (permission) =>
-                                  permission.route === "Newsletter Screen"
-                              )?.update && (
+                              {(userData.role === "admin" ||
+                                userData?.group?.permissions?.find(
+                                  (permission) =>
+                                    permission.route === "Newsletter Screen"
+                                )?.update) && (
                                 <button
                                   onClick={() => {
                                     openModal(),
@@ -383,9 +385,10 @@ const Newsletter = (props) => {
                   <h1 className="font-bold text-2xl text-black mb-4">
                     Manage Newsletters
                   </h1>
-                  {userData?.group?.permissions?.find(
-                    (permission) => permission.route === "Newsletter Screen"
-                  )?.create && (
+                  {(userData.role === "admin" ||
+                    userData?.group?.permissions?.find(
+                      (permission) => permission.route === "Newsletter Screen"
+                    )?.create) && (
                     <button
                       onClick={openAddBlogModal}
                       className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both`}

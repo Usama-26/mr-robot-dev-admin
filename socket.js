@@ -1,6 +1,4 @@
 import { io } from "socket.io-client";
-const socket = io.connect(
-  "https://mr-robobt-dev-backend-development.up.railway.app"
-);
+const socket = io.connect("https://cryomadness.com");
 
 export default socket;

@@ -129,9 +129,10 @@ export default function PricingTable({ headers, data, userData }) {
 
   return (
     <>
-      {userData?.group?.permissions?.find(
-        (permission) => permission.route === "App Pricing Screen"
-      )?.create && (
+      {(userData.role === "admin" ||
+        userData?.group?.permissions?.find(
+          (permission) => permission.route === "App Pricing Screen"
+        )?.create) && (
         <button
           onClick={openModal}
           className={`lg:px-8 lg:py-3 px-5 py-2 rounded-full mr-4 mb-4 lg:mb-0 text-white lg:text-base text-sm font-medium bg-[#D32A3D] focus:outline-none float-right clear-both lg:-mt-20`}
@@ -162,9 +163,11 @@ export default function PricingTable({ headers, data, userData }) {
                 <td className="border border-gray-700"> R {item.price}</td>
                 <td className="table-cell border border-gray-700">
                   <div className="flex flex-col justify-center items-center gap-4">
-                    {userData?.group?.permissions?.find(
-                      (permission) => permission.route === "App Pricing Screen"
-                    )?.update && (
+                    {(userData.role === "admin" ||
+                      userData?.group?.permissions?.find(
+                        (permission) =>
+                          permission.route === "App Pricing Screen"
+                      )?.update) && (
                       <button
                         onClick={() => {
                           openModal();
@@ -176,9 +179,11 @@ export default function PricingTable({ headers, data, userData }) {
                       </button>
                     )}
 
-                    {userData?.group?.permissions?.find(
-                      (permission) => permission.route === "App Pricing Screen"
-                    )?.delete && (
+                    {(userData.role === "admin" ||
+                      userData?.group?.permissions?.find(
+                        (permission) =>
+                          permission.route === "App Pricing Screen"
+                      )?.delete) && (
                       <button
                         onClick={() => {
                           openDeleteModal();

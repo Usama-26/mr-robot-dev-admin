@@ -133,9 +133,10 @@ export default function UserManagementTable({
 
   return (
     <>
-      {userData?.group?.permissions?.find(
-        (permission) => permission.route === "User Management"
-      )?.create && (
+      {(userData.role === "admin" ||
+        userData?.group?.permissions?.find(
+          (permission) => permission.route === "User Management"
+        )?.create) && (
         <>
           {member === "staff" && (
             <button
@@ -188,9 +189,10 @@ export default function UserManagementTable({
                 </td>
                 <td className="table-cell">{item?.signedUpBy}</td>
                 <td className="table-cell">
-                  {userData?.group?.permissions?.find(
-                    (permission) => permission.route === "User Management"
-                  )?.update && (
+                  {(userData.role === "admin" ||
+                    userData?.group?.permissions?.find(
+                      (permission) => permission.route === "User Management"
+                    )?.update) && (
                     <button
                       onClick={() => {
                         openModal(), setModalData(item);
