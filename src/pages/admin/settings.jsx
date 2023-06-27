@@ -104,9 +104,10 @@ const Settings = (props) => {
               className="object-cover w-32 h-32 rounded-full inline"
             />
 
-            {userData?.group?.permissions?.find(
-              (permission) => permission.route === "Settings"
-            )?.update && (
+            {(userData.role === "admin" ||
+              userData?.group?.permissions?.find(
+                (permission) => permission.route === "Settings"
+              )?.update) && (
               <button
                 className="bg-black text-white px-10 py-2 rounded-full font-medium inline ml-5"
                 onClick={handleButtonClick}
@@ -245,9 +246,10 @@ const Settings = (props) => {
             </div>
           </form>
           <div className="w-[830px]">
-            {userData?.group?.permissions?.find(
-              (permission) => permission.route === "Settings"
-            )?.update && (
+            {(userData.role === "admin" ||
+              userData?.group?.permissions?.find(
+                (permission) => permission.route === "Settings"
+              )?.update) && (
               <button
                 className="rounded-full py-2 px-10 bg-[#D32A3D] text-white font-medium float-right"
                 onClick={(e) => handleSubmit(e)}

@@ -39,9 +39,10 @@ const SideNav = (props) => {
             Dashboard
           </Link>
         </li>
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "App Pricing Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "App Pricing Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/pricing" className={styles["list-item"]}>
               <IoPricetags className={styles["list-item__icon"]} />
@@ -50,9 +51,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Blog Management Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Blog Management Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/blog_management" className={styles["list-item"]}>
               <MdDashboard className={styles["list-item__icon"]} />
@@ -61,9 +63,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Newsletter Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Newsletter Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/newsletter" className={styles["list-item"]}>
               <FaEnvelopeOpenText className={styles["list-item__icon"]} />
@@ -72,9 +75,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Statistics Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Statistics Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/statistics" className={styles["list-item"]}>
               <IoStatsChart className={styles["list-item__icon"]} />
@@ -83,9 +87,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Notifications Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Notifications Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/notifications" className={styles["list-item"]}>
               <MdNotifications className={styles["list-item__icon"]} />
@@ -94,9 +99,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Permissions Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Permissions Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/permissions" className={styles["list-item"]}>
               <TbShieldCheckered className={styles["list-item__icon"]} />
@@ -105,9 +111,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "User Management"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "User Management"
+          )?.view) && (
           <li>
             <Link href="/admin/user_management" className={styles["list-item"]}>
               <FaUsers className={styles["list-item__icon"]} />
@@ -116,9 +123,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Signup Approvals"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Signup Approvals"
+          )?.view) && (
           <li>
             <Link href="/admin/approvals" className={styles["list-item"]}>
               <IoMdPersonAdd className={styles["list-item__icon"]} />
@@ -127,9 +135,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Security"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Security"
+          )?.view) && (
           <li>
             <Link href="/admin/security" className={styles["list-item"]}>
               <GiCheckedShield className={styles["list-item__icon"]} />
@@ -138,9 +147,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Live Chat Screen"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Live Chat Screen"
+          )?.view) && (
           <li>
             <Link href="/admin/chat" className={styles["list-item"]}>
               <HiChatBubbleOvalLeft className={styles["list-item__icon"]} />
@@ -149,9 +159,10 @@ const SideNav = (props) => {
           </li>
         )}
 
-        {userData?.group?.permissions?.find(
-          (permission) => permission.route === "Settings"
-        )?.view && (
+        {(userData.role === "admin" ||
+          userData?.group?.permissions?.find(
+            (permission) => permission.route === "Settings"
+          )?.view) && (
           <li>
             <Link href="/admin/settings" className={styles["list-item"]}>
               <MdOutlineSettings className={styles["list-item__icon"]} />

@@ -97,9 +97,10 @@ export default function ApprovedTable({ headers, heading, role, userData }) {
                 <td className="table-cell"> {item.phoneNo}</td>
                 <td className="table-cell">{item?.country}</td>
                 <td className="table-cell">
-                  {userData?.group?.permissions?.find(
-                    (permission) => permission.route === "Signup Approvals"
-                  )?.update && (
+                  {(userData.role === "admin" ||
+                    userData?.group?.permissions?.find(
+                      (permission) => permission.route === "Signup Approvals"
+                    )?.update) && (
                     <>
                       {!item.isApproved && (
                         <button
